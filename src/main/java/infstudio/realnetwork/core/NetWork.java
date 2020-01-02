@@ -31,24 +31,14 @@ public class NetWork {
     private Map<BlockPos, Integer> map;
     private Graph G1, G2;
     private double matrix[][];
+    private boolean bccPositive[];
 
     public NetWork(World worldIn, BlockPos pos) {
-        vis = new ArrayList<>();
-        nodeList = new ArrayList<>();
-        dfn = new ArrayList<>();
-        low = new ArrayList<>();
-        bccID = new ArrayList<>();
-        stack = new Stack<>();
-        bcc = new ArrayList<>();
-        map = new HashMap<BlockPos, Integer>();
-        G1 = new Graph();
-        G2 = new Graph();
-        this.worldIn = worldIn;
-        this.pos = pos;
-        cnt = 0;
-        clock = 0;
-        bccCnt = -1;
-        initNetWork();
+        if (!worldIn.isRemote) {
+            this.worldIn = worldIn;
+            this.pos = pos;
+            initNetWork();
+        }
     }
 
     private EnumFacing getFaceByIndex(int index) {
@@ -119,9 +109,9 @@ public class NetWork {
     private void expandGraph(Node u) {
         while (vis.size() <= u.index) vis.add(false);
         vis.set(u.index, true);
-        if (G1.edges.size() <= u.index) return;
         Node uc = new Node(u.index*7+6, u.getPos());
         nodeList.add(uc);
+        if (G1.edges.size() <= u.index) return;
         double R = ((TileEntityWireBase) worldIn.getTileEntity(u.getPos())).getResistance()/G1.edges.get(u.index).size();
         for (int i = 0; i < G1.edges.get(u.index).size(); ++i) {
             Edge e = G1.edges.get(u.index).get(i);
@@ -142,6 +132,7 @@ public class NetWork {
     private void tarjan(Node u, Node par) {
         while (dfn.size() <= u.index) dfn.add(0);
         while (low.size() <= u.index) low.add(0);
+        while (G2.edges.size() <= u.index) G2.edges.add(new ArrayList<>());
         clock++;
         dfn.set(u.index, clock);
         low.set(u.index, clock);
@@ -153,7 +144,7 @@ public class NetWork {
                 tarjan(v, u);
                 low.set(u.index, Math.min(low.get(u.index), low.get(v.index)));
                 if (low.get(v.index) > dfn.get(u.index)) {
-                    isBridge[u.no][v.no] = isBridge[v.no][u.no] = true;
+                    isBridge[nodeList.indexOf(u)][nodeList.indexOf(v)] = isBridge[nodeList.indexOf(v)][nodeList.indexOf(u)] = true;
                 }
             } else if (dfn.get(v.index) < dfn.get(u.index) && v.index != par.index) {
                 low.set(u.index, Math.min(low.get(u.index), dfn.get(v.index)));
@@ -169,7 +160,7 @@ public class NetWork {
         bccID.set(u.index, bccCnt);
         for (int i = 0; i < G2.edges.get(u.index).size(); ++i) {
             Node v = G2.edges.get(u.index).get(i).v;
-            if (isBridge[u.no][v.no] || isBridge[v.no][u.no]) continue;
+            if (isBridge[nodeList.indexOf(u)][nodeList.indexOf(v)] || isBridge[nodeList.indexOf(v)][nodeList.indexOf(u)]) continue;
             while (vis.size() <= v.index) vis.add(false);
             if (!vis.get(v.index)) {
                 dfs(v);
@@ -179,17 +170,19 @@ public class NetWork {
 
     private void initMatrix() {
         matrix = new double[n][n+1];
+        bccPositive = new boolean[bccCnt+1];
         for (int p = 0; p < n; ++p) {
             Node u = nodeList.get(p);
-            if (bcc.get(bccID.get(u.index)).size() == 1) continue;
-            if (worldIn.getTileEntity(u.getPos()) instanceof TileEntityGenerator) {
+            if (bcc.get(bccID.get(u.index)).size() == 1) {
+                matrix[u.no][u.no] = 1;
+            } else if (worldIn.getTileEntity(u.getPos()) instanceof TileEntityGenerator) {
                 TileEntityGenerator tile = (TileEntityGenerator)worldIn.getTileEntity(u.getPos());
                 EnumFacing port[] = tile.getPort();
                 if (u.index%7 == port[0].getIndex()) {
                     matrix[u.no][u.no] = 1;
-                    for (int q = 0; q < n; ++q) {
-                        Node v = nodeList.get(q);
-                        if (v.getPos().getX() == u.getPos().getX() && v.getPos().getY() == u.getPos().getY() && v.getPos().getZ() == u.getPos().getZ() && v.index%7 == 6) {
+                    for (int i = 0; i < G2.edges.get(u.index).size(); ++i) {
+                        Node v = G2.edges.get(u.index).get(i).v;
+                        if (v.getPos().equals(u.getPos()) && v.index%7 == 6) {
                             matrix[u.no][nodeList.indexOf(v)] = -1;
                             break;
                         }
@@ -203,11 +196,34 @@ public class NetWork {
                         matrix[u.no][u.no] += 1.0f/1e-6;
                         matrix[u.no][nodeList.indexOf(v)] -= 1.0f/1e-6;
                     }
-                } else matrix[u.no][u.no] = 1;
+                } else {
+                    if (!bccPositive[bccID.get(u.index)]) {
+                        bccPositive[bccID.get(u.index)] = true;
+                        matrix[u.no][u.no] = 1;
+                    } else {
+                        for (int i = 0; i < G2.edges.get(u.index).size(); ++i) {
+                            Edge e = G2.edges.get(u.index).get(i);
+                            Node v = e.v;
+                            if (bccID.get(v.index) != bccID.get(u.index)) continue;
+                            if (v.getPos().equals(u.getPos()) && v.index%7 == port[1].getIndex()) {
+                                matrix[u.no][u.no] += 1.0f/1e-6;
+                                matrix[u.no][nodeList.indexOf(v)] -= 1.0f/1e-6;
+                            } else {
+                                for (int j = 0; j < G2.edges.get(v.index).size(); ++j) {
+                                    Edge ee = G2.edges.get(v.index).get(j);
+                                    Node vv = ee.v;
+                                    if (u.getPos().equals(vv.getPos())) continue;
+                                    if (bccID.get(v.index) != bccID.get(vv.index)) continue;
+                                    matrix[u.no][nodeList.indexOf(v)] += 1.0f/ee.w;
+                                    matrix[u.no][nodeList.indexOf(vv)] -= 1.0f/ee.w;
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 for (int i = 0; i < G2.edges.get(u.index).size(); ++i) {
                     Edge e = G2.edges.get(u.index).get(i);
-                    System.out.println(e.w);
                     Node v = e.v;
                     if (bccID.get(v.index) != bccID.get(u.index)) continue;
                     matrix[u.no][u.no] += 1.0f/e.w;
@@ -230,7 +246,7 @@ public class NetWork {
             for (int j = 0; j < n; ++j) {
                 if (j != i) {
                     double x = matrix[j][i]/matrix[i][i];
-                    for (int k = i+1; k < n+1; ++k) matrix[j][k] -= x*matrix[i][k];
+                    for (int k = 0; k < n+1; ++k) matrix[j][k] -= x*matrix[i][k];
                 }
             }
         }
@@ -239,36 +255,52 @@ public class NetWork {
     }
 
     private void initNetWork() {
-        if (!worldIn.isRemote) {
-            map.put(pos, cnt);
-            Node u = new Node(cnt, pos);
-            initGraph(u);
-            expandGraph(u);
-            n = nodeList.size();
-            isBridge = new boolean[n][n];
-            for (int i = 0; i < n; ++i) {
-                nodeList.get(i).no = i;
-                while (dfn.size() <= nodeList.get(i).index) dfn.add(0);
-                if (dfn.get(nodeList.get(i).index) == 0) {
-                    tarjan(nodeList.get(i), new Node(-1, null));
-                }
+        vis = new ArrayList<>();
+        nodeList = new ArrayList<>();
+        dfn = new ArrayList<>();
+        low = new ArrayList<>();
+        bccID = new ArrayList<>();
+        stack = new Stack<>();
+        bcc = new ArrayList<>();
+        map = new HashMap<BlockPos, Integer>();
+        G1 = new Graph();
+        G2 = new Graph();
+        cnt = 0;
+        clock = 0;
+        bccCnt = -1;
+        map.put(pos, cnt);
+        Node u = new Node(cnt, pos);
+        initGraph(u);
+        expandGraph(u);
+        n = nodeList.size();
+        isBridge = new boolean[n][n];
+        for (int i = 0; i < n; ++i) {
+            nodeList.get(i).no = i;
+            while (dfn.size() <= nodeList.get(i).index) dfn.add(0);
+            if (dfn.get(nodeList.get(i).index) == 0) {
+                tarjan(nodeList.get(i), new Node(-1, null));
             }
-            vis.clear();
-            for (int i = 0; i < n; ++i) {
-                while (vis.size() <= nodeList.get(i).index) vis.add(false);
-                if (!vis.get(nodeList.get(i).index)) {
-                    bccCnt++;
-                    bcc.add(new ArrayList<>());
-                    dfs(nodeList.get(i));
-                }
+        }
+        vis.clear();
+        for (int i = 0; i < n; ++i) {
+            while (vis.size() <= nodeList.get(i).index) vis.add(false);
+            if (!vis.get(nodeList.get(i).index)) {
+                bccCnt++;
+                bcc.add(new ArrayList<>());
+                dfs(nodeList.get(i));
             }
-            initMatrix();
-            if (!gauss()) System.out.println("fuck you");
+        }
+        initMatrix();
+        if (!gauss()) {
             for (int i = 0; i < n; ++i) {
                 u = nodeList.get(i);
-                TileEntityWireBase tile = (TileEntityWireBase)worldIn.getTileEntity(u.getPos());
-                if (!(tile instanceof TileEntityGenerator)) tile.setPhi(matrix[i][n], u.index%7);
+                TileEntityWireBase tile = (TileEntityWireBase) worldIn.getTileEntity(u.getPos());
+                if (!(tile instanceof TileEntityGenerator)) tile.setPhi(new double[] {0, 0, 0, 0, 0, 0, 0});
             }
+        } else for (int i = 0; i < n; ++i) {
+            u = nodeList.get(i);
+            TileEntityWireBase tile = (TileEntityWireBase)worldIn.getTileEntity(u.getPos());
+            if (!(tile instanceof TileEntityGenerator)) tile.setPhi(matrix[i][n], u.index%7);
         }
     }
 

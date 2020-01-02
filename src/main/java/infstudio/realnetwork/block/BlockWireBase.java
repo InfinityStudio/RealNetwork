@@ -14,7 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.Explosion;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockWireBase extends Block {
@@ -45,21 +45,16 @@ public class BlockWireBase extends Block {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        NetWork netWork = new NetWork(worldIn, pos);
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-
+        NetWork netWork = new NetWork(worldIn, pos);
     }
 
     @Override
-    public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
-        NetWork netWork = new NetWork(worldIn, pos);
-        super.onBlockDestroyedByPlayer(worldIn, pos, state);
-    }
-
-    @Override
-    public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
-        NetWork netWork = new NetWork(worldIn, pos);
-        super.onBlockDestroyedByExplosion(worldIn, pos, explosionIn);
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+        super.onNeighborChange(world, pos, neighbor);
+        if (world instanceof World) {
+            NetWork netWork = new NetWork((World)world, pos);
+        }
     }
 
     @Override
