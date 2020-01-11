@@ -1,5 +1,7 @@
 package infstudio.realnetwork.tileentity;
 
+import net.minecraft.util.EnumFacing;
+
 public class TileEntityResistance extends TileEntityMachineBase {
 
     public TileEntityResistance() {

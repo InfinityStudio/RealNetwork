@@ -1,20 +1,20 @@
 package infstudio.realnetwork.block;
 
-import infstudio.realnetwork.tileentity.TileEntityGenerator;
+import infstudio.realnetwork.tileentity.TileEntityBEMF;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockGenerator extends BlockMachineBase {
+public class BlockBEMF extends BlockResistance {
 
-    public BlockGenerator() {
+    public BlockBEMF() {
         super();
-        setName("generator");
+        setName("bemf");
     }
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityGenerator(0.1f, 6.0f);
+        return new TileEntityBEMF(3.0f, 3.0f);
     }
 
 }

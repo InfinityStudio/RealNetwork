@@ -24,10 +24,12 @@ public class ItemTool extends Item {
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             if (worldIn.getTileEntity(pos) instanceof TileEntityMachineBase) {
-                ((TileEntityMachineBase) worldIn.getTileEntity(pos)).setPort(facing);
+                ((TileEntityMachineBase) worldIn.getTileEntity(pos)).setFacing(player.getHorizontalFacing());
+                worldIn.notifyBlockUpdate(pos, worldIn.getBlockState(pos), worldIn.getBlockState(pos), 2);
                 NetWork netWork = new NetWork(worldIn, pos);
             }
         }
+
         return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
 

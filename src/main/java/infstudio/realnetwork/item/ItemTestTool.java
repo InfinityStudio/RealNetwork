@@ -2,6 +2,7 @@ package infstudio.realnetwork.item;
 
 import infstudio.realnetwork.RealNetwork;
 import infstudio.realnetwork.tileentity.TileEntityMachineBase;
+import infstudio.realnetwork.tileentity.TileEntityResistance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
@@ -26,6 +27,7 @@ public class ItemTestTool extends Item {
             if (worldIn.getTileEntity(pos) instanceof TileEntityMachineBase) {
                 TileEntityMachineBase tile = (TileEntityMachineBase) worldIn.getTileEntity(pos);
                 player.sendMessage(new TextComponentString("port[0]="+tile.getPort()[0].getName()+", port[1]="+tile.getPort()[1].getName()));
+                player.sendMessage(new TextComponentString("I="+String.format("%.2f", tile.getI())+"A"));
             }
         }
         return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);

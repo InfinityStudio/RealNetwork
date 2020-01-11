@@ -1,10 +1,7 @@
 package infstudio.realnetwork.core;
 
 import infstudio.realnetwork.block.BlockWireBase;
-import infstudio.realnetwork.tileentity.TileEntityGenerator;
-import infstudio.realnetwork.tileentity.TileEntityMachineBase;
-import infstudio.realnetwork.tileentity.TileEntityWire;
-import infstudio.realnetwork.tileentity.TileEntityWireBase;
+import infstudio.realnetwork.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -18,6 +15,7 @@ import java.util.Stack;
 public class NetWork {
 
     private static final int dir[][] = {{0, -1, 0}, {0, 1, 0}, {0, 0, -1}, {0, 0, 1}, {-1, 0, 0}, {1, 0, 0}};
+    private static final double EPS = 1e-8;
     
     private World worldIn;
     private BlockPos pos;
@@ -122,7 +120,7 @@ public class NetWork {
             while (vis.size() <= e.v.index) vis.add(false);
             Node vi = new Node(e.v.index*7+e.facing.getOpposite().getIndex(), e.v.getPos());
             if (!nodeList.contains(vi)) nodeList.add(vi);
-            G2.addEdge(ui, vi, 1e-6, e.facing);
+            G2.addEdge(ui, vi, EPS, e.facing);
             if (!vis.get(G1.edges.get(u.index).get(i).v.index)) {
                 expandGraph(G1.edges.get(u.index).get(i).v);
             }
@@ -193,8 +191,13 @@ public class NetWork {
                         Edge e = G2.edges.get(u.index).get(i);
                         Node v = e.v;
                         if (bccID.get(v.index) != bccID.get(u.index)) continue;
-                        matrix[u.no][u.no] += 1.0f/1e-6;
-                        matrix[u.no][nodeList.indexOf(v)] -= 1.0f/1e-6;
+                        if (u.getPos().equals(v.getPos())) {
+                            matrix[u.no][u.no] += 1.0f/tile.getResistance();
+                            matrix[u.no][nodeList.indexOf(v)] -= 1.0f/tile.getResistance();
+                        } else {
+                            matrix[u.no][u.no] += 1.0f/e.w;
+                            matrix[u.no][nodeList.indexOf(v)] -= 1.0f/e.w;
+                        }
                     }
                 } else {
                     if (!bccPositive[bccID.get(u.index)]) {
@@ -206,8 +209,8 @@ public class NetWork {
                             Node v = e.v;
                             if (bccID.get(v.index) != bccID.get(u.index)) continue;
                             if (v.getPos().equals(u.getPos()) && v.index%7 == port[1].getIndex()) {
-                                matrix[u.no][u.no] += 1.0f/1e-6;
-                                matrix[u.no][nodeList.indexOf(v)] -= 1.0f/1e-6;
+                                matrix[u.no][u.no] += 1.0f/tile.getResistance();
+                                matrix[u.no][nodeList.indexOf(v)] -= 1.0f/tile.getResistance();
                             } else {
                                 for (int j = 0; j < G2.edges.get(v.index).size(); ++j) {
                                     Edge ee = G2.edges.get(v.index).get(j);
@@ -237,7 +240,7 @@ public class NetWork {
         for (int i = 0, r; i < n; ++i) {
             r = i;
             for (int j = i+1; j < n; ++j) r = Math.abs(matrix[j][i]) > Math.abs(matrix[r][i]) ? j : r;
-            if (Math.abs(matrix[r][i]) < 1e-8) return false;
+            if (Math.abs(matrix[r][i]) < EPS) return false;
             if (r != i) for (int j = 0; j < n+1; ++j) {
                 double temp = matrix[i][j];
                 matrix[i][j] = matrix[r][j];
@@ -295,12 +298,12 @@ public class NetWork {
             for (int i = 0; i < n; ++i) {
                 u = nodeList.get(i);
                 TileEntityWireBase tile = (TileEntityWireBase) worldIn.getTileEntity(u.getPos());
-                if (!(tile instanceof TileEntityGenerator)) tile.setPhi(new double[] {0, 0, 0, 0, 0, 0, 0});
+                tile.setPhi(new double[] {0, 0, 0, 0, 0, 0, 0});
             }
         } else for (int i = 0; i < n; ++i) {
             u = nodeList.get(i);
             TileEntityWireBase tile = (TileEntityWireBase)worldIn.getTileEntity(u.getPos());
-            if (!(tile instanceof TileEntityGenerator)) tile.setPhi(matrix[i][n], u.index%7);
+            tile.setPhi(matrix[i][n], u.index%7);
         }
     }
 

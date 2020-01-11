@@ -13,8 +13,8 @@ public class BlockWire extends BlockWireBase {
     }
 
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileEntityWire(0.1f);
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileEntityWire(0.01f);
     }
 
 }

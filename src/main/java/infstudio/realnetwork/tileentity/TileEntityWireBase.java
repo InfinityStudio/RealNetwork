@@ -1,8 +1,12 @@
 package infstudio.realnetwork.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
+import javax.annotation.Nullable;
 
 public class TileEntityWireBase extends TileEntity {
 
@@ -36,6 +40,26 @@ public class TileEntityWireBase extends TileEntity {
         return super.writeToNBT(compound);
     }
 
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        NBTTagCompound compound = new NBTTagCompound();
+        compound = writeToNBT(compound);
+        return new SPacketUpdateTileEntity(getPos(), 1, compound);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        readFromNBT(pkt.getNbtCompound());
+    }
+
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        NBTTagCompound compound = new NBTTagCompound();
+        compound = writeToNBT(compound);
+        return compound;
+    }
+
     public double getResistance() {
         return R;
     }
@@ -44,8 +68,16 @@ public class TileEntityWireBase extends TileEntity {
         this.R = R;
     }
 
+    public double getU() {
+        return Math.abs(phi[1]-phi[0]);
+    }
+
     public double getI() {
-        return (phi[1]-phi[0])/R;
+        return getU()/R;
+    }
+
+    public double getP() {
+        return getU()*getI();
     }
 
     public void setPhi(double phiA, double phiB) {

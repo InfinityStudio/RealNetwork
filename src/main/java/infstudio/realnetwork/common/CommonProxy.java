@@ -1,6 +1,7 @@
 package infstudio.realnetwork.common;
 
 import infstudio.realnetwork.block.BlockLoader;
+import infstudio.realnetwork.gui.GuiLoader;
 import infstudio.realnetwork.item.ItemLoader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -11,6 +12,7 @@ public abstract class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         new BlockLoader();
         new ItemLoader();
+        new GuiLoader();
     }
 
     public void init(FMLInitializationEvent event) {

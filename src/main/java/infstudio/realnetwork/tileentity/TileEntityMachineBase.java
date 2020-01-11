@@ -6,6 +6,7 @@ import net.minecraft.util.EnumFacing;
 public class TileEntityMachineBase extends TileEntityWireBase {
 
     protected EnumFacing port[] = new EnumFacing[2];
+    protected EnumFacing facing;
 
     public TileEntityMachineBase() {
         super();
@@ -13,8 +14,9 @@ public class TileEntityMachineBase extends TileEntityWireBase {
 
     public TileEntityMachineBase(double R) {
         super(R);
-        port[0] = EnumFacing.NORTH;
-        port[1] = EnumFacing.SOUTH;
+        port[0] = EnumFacing.WEST;
+        port[1] = EnumFacing.EAST;
+        facing = EnumFacing.NORTH;
     }
 
     @Override
@@ -25,12 +27,14 @@ public class TileEntityMachineBase extends TileEntityWireBase {
             port[0] = getFaceByIndex(portIndex[0]);
             port[1] = getFaceByIndex(portIndex[1]);
         }
+        facing = getFaceByIndex(compound.getInteger("Facing"));
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         int portIndex[] = new int[] {port[0].getIndex(), port[1].getIndex()};
         compound.setIntArray("Port", portIndex);
+        compound.setInteger("Facing", facing.getIndex());
         return super.writeToNBT(compound);
     }
 
@@ -44,7 +48,16 @@ public class TileEntityMachineBase extends TileEntityWireBase {
     }
 
     @Override
-    public double getI() {
-        return Math.abs((phi[port[0].getIndex()]-phi[port[1].getIndex()])/R);
+    public double getU() {
+        return Math.abs(phi[port[0].getIndex()]-phi[port[1].getIndex()]);
     }
+
+    public EnumFacing getFacing() {
+        return facing;
+    }
+
+    public void setFacing(EnumFacing facing) {
+        this.facing = facing;
+    }
+
 }

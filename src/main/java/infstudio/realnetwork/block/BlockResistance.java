@@ -5,7 +5,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockResistance extends BlockWireBase {
+public class BlockResistance extends BlockMachineBase {
 
     public BlockResistance() {
         super();
@@ -13,7 +13,7 @@ public class BlockResistance extends BlockWireBase {
     }
 
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileEntityResistance(3.0f);
     }
 
