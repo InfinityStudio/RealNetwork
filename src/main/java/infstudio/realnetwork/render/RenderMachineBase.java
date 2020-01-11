@@ -3,6 +3,8 @@ package infstudio.realnetwork.render;
 import infstudio.realnetwork.RealNetwork;
 import infstudio.realnetwork.render.model.ModelMachineBase;
 import infstudio.realnetwork.tileentity.TileEntityMachineBase;
+import infstudio.realnetwork.util.FacingHelper;
+import infstudio.realnetwork.util.TextureHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
@@ -25,15 +27,17 @@ public class RenderMachineBase extends TileEntitySpecialRenderer<TileEntityMachi
     @Override
     public void render(TileEntityMachineBase te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         frontTexture = new ResourceLocation(RealNetwork.MODID+":textures/blocks/machine/"+helper.getNameFromTileEntity(te)+".png");
-        baseTexture = new ResourceLocation(RealNetwork.MODID+":textures/blocks/machine/base/base.png");
+
         EnumFacing facing = te.getFacing();
         switch (facing) {
             case NORTH: angle = 0.0F; break;
             case SOUTH: angle = 180.0F; break;
             case WEST: angle = -90.0F; break;
             case EAST: angle = 90.0F; break;
-            default: angle = 0.0F; break;
         }
+        FacingHelper helper = new FacingHelper(facing);
+        int index = (1 << helper.getRelative(te.getPort()[0]).getIndex()) + (1 << helper.getRelative(te.getPort()[1]).getIndex());
+        baseTexture = new ResourceLocation(RealNetwork.MODID+":textures/blocks/machine/base/"+index+".png");
 
         GlStateManager.enableDepth();
         GlStateManager.depthFunc(515);

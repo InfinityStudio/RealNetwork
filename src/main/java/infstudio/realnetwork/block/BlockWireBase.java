@@ -35,14 +35,14 @@ public class BlockWireBase extends BlockContainer {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-        NetWork netWork = new NetWork(worldIn, pos);
+        new NetWork(worldIn, pos);
     }
 
     @Override
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
         super.onNeighborChange(world, pos, neighbor);
         if (world instanceof World) {
-            NetWork netWork = new NetWork((World)world, pos);
+            new NetWork((World)world, pos);
         }
     }
 

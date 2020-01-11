@@ -1,5 +1,6 @@
 package infstudio.realnetwork.tileentity;
 
+import infstudio.realnetwork.util.FacingHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
@@ -42,11 +43,6 @@ public class TileEntityMachineBase extends TileEntityWireBase {
         return port;
     }
 
-    public void setPort(EnumFacing facing) {
-        port[0] = facing;
-        port[1] = facing.getOpposite();
-    }
-
     @Override
     public double getU() {
         return Math.abs(phi[port[0].getIndex()]-phi[port[1].getIndex()]);
@@ -57,6 +53,10 @@ public class TileEntityMachineBase extends TileEntityWireBase {
     }
 
     public void setFacing(EnumFacing facing) {
+        FacingHelper oldHelper = new FacingHelper(this.facing);
+        FacingHelper newHelper = new FacingHelper(facing);
+        this.port[0] = newHelper.getFacing(oldHelper.getRelative(this.port[0]));
+        this.port[1] = newHelper.getFacing(oldHelper.getRelative(this.port[1]));
         this.facing = facing;
     }
 

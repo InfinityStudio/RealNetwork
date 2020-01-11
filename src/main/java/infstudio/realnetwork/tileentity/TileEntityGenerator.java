@@ -14,8 +14,6 @@ public class TileEntityGenerator extends TileEntityMachineBase {
     public TileEntityGenerator(double R, double E) {
         super(R);
         setE(E);
-        setPositive(EnumFacing.NORTH);
-        setNegative(EnumFacing.SOUTH);
     }
 
     @Override
