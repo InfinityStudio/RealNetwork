@@ -9,8 +9,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ModelMachineBase extends ModelBase {
 
-    public ModelRenderer base;
-    public ModelRenderer front;
+    private final ModelRenderer base;
+    private final ModelRenderer front;
 
     public ModelMachineBase() {
         textureWidth = 64;

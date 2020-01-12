@@ -166,11 +166,12 @@ public class NetWork {
         }
     }
 
-    private void initMatrix() {
+    private void initMatrix(int bccNum) {
         matrix = new double[n][n+1];
         bccPositive = new boolean[bccCnt+1];
         for (int p = 0; p < n; ++p) {
             Node u = nodeList.get(p);
+            if (bccID.get(u.index) != bccNum) continue;
             if (bcc.get(bccID.get(u.index)).size() == 1) {
                 matrix[u.no][u.no] = 1;
             } else if (worldIn.getTileEntity(u.getPos()) instanceof TileEntityGenerator) {
@@ -240,7 +241,10 @@ public class NetWork {
         for (int i = 0, r; i < n; ++i) {
             r = i;
             for (int j = i+1; j < n; ++j) r = Math.abs(matrix[j][i]) > Math.abs(matrix[r][i]) ? j : r;
-            if (Math.abs(matrix[r][i]) < EPS) return false;
+            if (Math.abs(matrix[r][i]) < EPS) {
+                if (Math.abs(matrix[r][n]) > EPS) return false;
+                else continue;
+            }
             if (r != i) for (int j = 0; j < n+1; ++j) {
                 double temp = matrix[i][j];
                 matrix[i][j] = matrix[r][j];
@@ -253,7 +257,11 @@ public class NetWork {
                 }
             }
         }
-        for (int i = 0; i < n; ++i) matrix[i][n] /= matrix[i][i];
+        for (int i = 0; i < n; ++i) {
+            if (Math.abs(matrix[i][i]) > EPS) {
+                matrix[i][n] /= matrix[i][i];
+            }
+        }
         return true;
     }
 
@@ -293,17 +301,21 @@ public class NetWork {
                 dfs(nodeList.get(i));
             }
         }
-        initMatrix();
-        if (!gauss()) {
-            for (int i = 0; i < n; ++i) {
+        for (int bccNum = 0; bccNum <= bccCnt; ++bccNum) {
+            initMatrix(bccNum);
+            if (!gauss()) {
+                for (int i = 0; i < n; ++i) {
+                    u = nodeList.get(i);
+                    if (bccID.get(u.index) != bccNum) continue;
+                    TileEntityWireBase tile = (TileEntityWireBase) worldIn.getTileEntity(u.getPos());
+                    tile.setPhi(new double[] {0, 0, 0, 0, 0, 0, 0});
+                }
+            } else for (int i = 0; i < n; ++i) {
                 u = nodeList.get(i);
-                TileEntityWireBase tile = (TileEntityWireBase) worldIn.getTileEntity(u.getPos());
-                tile.setPhi(new double[] {0, 0, 0, 0, 0, 0, 0});
+                if (bccID.get(u.index) != bccNum) continue;
+                TileEntityWireBase tile = (TileEntityWireBase)worldIn.getTileEntity(u.getPos());
+                tile.setPhi(matrix[i][n], u.index%7);
             }
-        } else for (int i = 0; i < n; ++i) {
-            u = nodeList.get(i);
-            TileEntityWireBase tile = (TileEntityWireBase)worldIn.getTileEntity(u.getPos());
-            tile.setPhi(matrix[i][n], u.index%7);
         }
     }
 

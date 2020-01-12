@@ -2,6 +2,7 @@ package infstudio.realnetwork.block;
 
 import infstudio.realnetwork.RealNetwork;
 import infstudio.realnetwork.render.RenderMachineBase;
+import infstudio.realnetwork.render.RenderWire;
 import infstudio.realnetwork.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -55,11 +56,7 @@ public class BlockLoader {
     @SubscribeEvent
     public static void registerRender(ModelRegistryEvent event) {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineBase.class, new RenderMachineBase());
-        //ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAmmeter.class, new TileEntityAmmeterRender());
-        /*OBJLoader.INSTANCE.addDomain(RealNetwork.MODID);
-        for (int i = 0; i < blockList.length; ++i) {
-            registerRender(blockList[i]);
-        }*/
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWire.class, new RenderWire());
     }
 
 }
