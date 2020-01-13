@@ -1,12 +1,14 @@
 package infstudio.realnetwork.gui;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.Container;
+import infstudio.realnetwork.container.ContainerVoltmeter;
 
-public class GuiVoltmeter extends GuiContainer {
+public class GuiVoltmeter extends GuiMachineBase {
 
-    public GuiVoltmeter(Container inventorySlotsIn) {
+    private ContainerVoltmeter container;
+
+    public GuiVoltmeter(ContainerVoltmeter inventorySlotsIn) {
         super(inventorySlotsIn);
+        this.container = inventorySlotsIn;
     }
 
     @Override

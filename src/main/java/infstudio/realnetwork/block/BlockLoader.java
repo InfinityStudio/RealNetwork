@@ -57,6 +57,9 @@ public class BlockLoader {
     public static void registerRender(ModelRegistryEvent event) {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineBase.class, new RenderMachineBase());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWire.class, new RenderWire());
+        for (int i = 0; i < blockList.length; ++i) {
+            registerRender(blockList[i]);
+        }
     }
 
 }

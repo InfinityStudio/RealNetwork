@@ -60,4 +60,8 @@ public class TileEntityMachineBase extends TileEntityWireBase {
         this.facing = facing;
     }
 
+    public void setPort(EnumFacing facing, int index) {
+        this.port[index] = facing;
+    }
+
 }

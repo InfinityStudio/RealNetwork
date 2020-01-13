@@ -1,5 +1,7 @@
 package infstudio.realnetwork.block;
 
+import infstudio.realnetwork.RealNetwork;
+import infstudio.realnetwork.gui.GuiLoader;
 import infstudio.realnetwork.tileentity.TileEntityAmmeter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,7 +9,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public class BlockAmmeter extends BlockResistance {
@@ -25,10 +26,9 @@ public class BlockAmmeter extends BlockResistance {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
-            TileEntityAmmeter tile = (TileEntityAmmeter) worldIn.getTileEntity(pos);
-            playerIn.sendMessage(new TextComponentString("I="+String.format("%.2f", tile.getI())+"A"));
+            playerIn.openGui(RealNetwork.instance, GuiLoader.GUI_AMMETER, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+        return true;
     }
 
 }

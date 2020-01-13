@@ -52,6 +52,8 @@ public class NetWork {
     }
 
     private void initGraph(Node u) {
+        ((TileEntityWireBase)worldIn.getTileEntity(u.getPos())).setPhi(new double[] {0, 0, 0, 0, 0, 0, 0});
+        worldIn.notifyBlockUpdate(u.getPos(), worldIn.getBlockState(u.getPos()), worldIn.getBlockState(u.getPos()), 2);
         if (worldIn.getTileEntity(u.getPos()) instanceof TileEntityWire) {
             for (int i = 0; i < 6; ++i) {
                 BlockPos vPos = new BlockPos(u.getPos().getX()+dir[i][0], u.getPos().getY()+dir[i][1], u.getPos().getZ()+dir[i][2]);
@@ -303,18 +305,12 @@ public class NetWork {
         }
         for (int bccNum = 0; bccNum <= bccCnt; ++bccNum) {
             initMatrix(bccNum);
-            if (!gauss()) {
-                for (int i = 0; i < n; ++i) {
-                    u = nodeList.get(i);
-                    if (bccID.get(u.index) != bccNum) continue;
-                    TileEntityWireBase tile = (TileEntityWireBase) worldIn.getTileEntity(u.getPos());
-                    tile.setPhi(new double[] {0, 0, 0, 0, 0, 0, 0});
-                }
-            } else for (int i = 0; i < n; ++i) {
+            if (gauss()) for (int i = 0; i < n; ++i) {
                 u = nodeList.get(i);
                 if (bccID.get(u.index) != bccNum) continue;
                 TileEntityWireBase tile = (TileEntityWireBase)worldIn.getTileEntity(u.getPos());
                 tile.setPhi(matrix[i][n], u.index%7);
+                worldIn.notifyBlockUpdate(u.getPos(), worldIn.getBlockState(u.getPos()), worldIn.getBlockState(u.getPos()), 2);
             }
         }
     }
