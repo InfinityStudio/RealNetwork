@@ -1,7 +1,8 @@
 package infstudio.realnetwork.gui;
 
 import infstudio.realnetwork.container.ContainerMachineBase;
-import infstudio.realnetwork.core.NetWork;
+import infstudio.realnetwork.network.MessageFacing;
+import infstudio.realnetwork.network.NetworkLoader;
 import infstudio.realnetwork.tileentity.TileEntityGenerator;
 import infstudio.realnetwork.util.EnumRelativeFacing;
 import infstudio.realnetwork.util.FacingHelper;
@@ -10,6 +11,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
@@ -39,8 +41,8 @@ public class GuiMachineBase extends GuiContainer {
     public void initGui() {
         super.initGui();
         int offsetX = (this.width-this.xSize)/2, offsetY = (this.height-this.ySize)/2;
-        this.buttonList.add(new GuiButtonFacing(buttonLeft, offsetX+16, offsetY+32, 16, 16, "", container.getTileMachine(), EnumRelativeFacing.LEFT));
-        this.buttonList.add(new GuiButtonFacing(buttonRight, offsetX+48, offsetY+32, 16, 16, "", container.getTileMachine(), EnumRelativeFacing.RIGHT));
+        this.buttonList.add(new GuiButtonFacing(buttonLeft, offsetX+48, offsetY+32, 16, 16, "", container.getTileMachine(), EnumRelativeFacing.LEFT));
+        this.buttonList.add(new GuiButtonFacing(buttonRight, offsetX+16, offsetY+32, 16, 16, "", container.getTileMachine(), EnumRelativeFacing.RIGHT));
         this.buttonList.add(new GuiButtonFacing(buttonTop, offsetX+32, offsetY+16, 16, 16, "", container.getTileMachine(), EnumRelativeFacing.TOP));
         this.buttonList.add(new GuiButtonFacing(buttonBottom, offsetX+32, offsetY+48, 16, 16, "", container.getTileMachine(), EnumRelativeFacing.BOTTOM));
         this.buttonList.add(new GuiButtonFacing(buttonBack, offsetX+48, offsetY+48, 16, 16, "", container.getTileMachine(), EnumRelativeFacing.BACK));
@@ -89,7 +91,7 @@ public class GuiMachineBase extends GuiContainer {
                                     flag = false;
                                     break;
                                 }
-                                facing[cnt++] = helper.getFacing(EnumRelativeFacing.getFacingByIndex(i));
+                                facing[cnt++] = helper.getFacing(EnumRelativeFacing.getFacingByIndex(buttonList.get(i).id));
                             }
                         }
                     }
@@ -97,12 +99,13 @@ public class GuiMachineBase extends GuiContainer {
                     if (flag) {
                         container.getTileMachine().setPort(facing[0], 0);
                         container.getTileMachine().setPort(facing[1], 1);
-                        String success = I18n.format("gui.change_port_successful");
-                        this.fontRenderer.drawString(success, offsetX+17, offsetY+65, 0x00f455);
-                        new NetWork(container.getTileMachine().getWorld(), container.getTileMachine().getPos());
+                        String success = "change successfully";
+                        this.fontRenderer.drawString(success, offsetX+17, offsetY+65, 4210752);
+                        MessageFacing message = new MessageFacing(container.getTileMachine().writeToNBT(new NBTTagCompound()), container.getTileMachine().getPos());
+                        NetworkLoader.instance.sendToServer(message);
                     } else {
                         String fail = I18n.format("gui.change_port_fail");
-                        this.fontRenderer.drawString(fail, offsetX+17, offsetY+65, 0xff002a);
+                        this.fontRenderer.drawString(fail, offsetX+17, offsetY+65, 4210752);
                     }
                 }
                 break;

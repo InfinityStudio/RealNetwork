@@ -25,7 +25,7 @@ public class ItemTool extends Item {
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             if (worldIn.getTileEntity(pos) instanceof TileEntityMachineBase) {
-                ((TileEntityMachineBase) worldIn.getTileEntity(pos)).setFacing(player.getHorizontalFacing());
+                ((TileEntityMachineBase) worldIn.getTileEntity(pos)).setFacing(player.getHorizontalFacing().getOpposite());
                 worldIn.notifyBlockUpdate(pos, worldIn.getBlockState(pos), worldIn.getBlockState(pos), 2);
                 new NetWork(worldIn, pos);
                 if (worldIn.getBlockState(pos.east()).getBlock() instanceof BlockWireBase) new NetWork(worldIn, pos.east());

@@ -10,13 +10,14 @@ import net.minecraftforge.fml.relauncher.Side;
 public class NetworkLoader {
 
     public static SimpleNetworkWrapper instance = NetworkRegistry.INSTANCE.newSimpleChannel(RealNetwork.MODID);
+    private static int ID = 0;
 
     public NetworkLoader() {
-
+        registerMessage(MessageFacing.Handler.class, MessageFacing.class, Side.SERVER);
     }
 
     private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<REQ> requestMessageType, Side side) {
-
+        instance.registerMessage(messageHandler, requestMessageType, ID++, side);
     }
 
 }

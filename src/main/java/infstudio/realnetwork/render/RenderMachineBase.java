@@ -30,10 +30,10 @@ public class RenderMachineBase extends TileEntitySpecialRenderer<TileEntityMachi
 
         EnumFacing facing = te.getFacing();
         switch (facing) {
-            case NORTH: angle = 0.0F; break;
-            case SOUTH: angle = 180.0F; break;
-            case WEST: angle = -90.0F; break;
-            case EAST: angle = 90.0F; break;
+            case NORTH: angle = 180.0F; break;
+            case SOUTH: angle = 0.0F; break;
+            case WEST: angle = 90.0F; break;
+            case EAST: angle = -90.0F; break;
         }
         FacingHelper helper = new FacingHelper(facing);
         int index = (1 << helper.getRelative(te.getPort()[0]).getIndex()) + (1 << helper.getRelative(te.getPort()[1]).getIndex());

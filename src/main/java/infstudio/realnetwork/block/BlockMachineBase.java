@@ -15,7 +15,7 @@ public class BlockMachineBase extends BlockWireBase {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         if (!worldIn.isRemote) {
-            ((TileEntityMachineBase)worldIn.getTileEntity(pos)).setFacing(placer.getHorizontalFacing());
+            ((TileEntityMachineBase)worldIn.getTileEntity(pos)).setFacing(placer.getHorizontalFacing().getOpposite());
             worldIn.notifyBlockUpdate(pos, worldIn.getBlockState(pos), worldIn.getBlockState(pos), 2);
         }
         new NetWork(worldIn, pos);
