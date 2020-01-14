@@ -1,32 +1,46 @@
 package infstudio.realnetwork.tileentity;
 
+import infstudio.realnetwork.util.FuncSin;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
 
 public class TileEntityWireBase extends TileEntity {
 
     protected double R;
-    protected double phi[] = new double[7];
+    protected FuncSin phi[] = new FuncSin[] {new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin()};
+    protected String name;
 
     public TileEntityWireBase() {
 
     }
 
-    public TileEntityWireBase(double R) {
-        setPhi(new double[] {0, 0, 0, 0, 0, 0, 0});
+    public TileEntityWireBase(double R, String name) {
+        setPhi(new FuncSin[7]);
         setResistance(R);
+        this.name = name;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         for (int i = 0; i < 7; ++i) {
-            phi[i] = compound.getDouble("Phi"+i);
+            NBTTagCompound nbt = (NBTTagCompound)compound.getTag("Phi"+i);
+            double[] arrayPhi = new double[nbt.getInteger("PhiSize")];
+            for (int j = 0; j < arrayPhi.length; ++j) {
+                arrayPhi[j] = nbt.getDouble("Phi"+j);
+            }
+            double[] arrayA = new double[nbt.getInteger("ASize")];
+            for (int j = 0; j < arrayA.length; ++j) {
+                arrayA[j] = nbt.getDouble("A"+j);
+            }
+            phi[i] = new FuncSin(arrayPhi, arrayA);
         }
         R = compound.getDouble("Resistance");
     }
@@ -34,7 +48,18 @@ public class TileEntityWireBase extends TileEntity {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         for (int i = 0; i < 7; ++i) {
-            compound.setDouble("Phi"+i, phi[i]);
+            NBTTagCompound nbt = new NBTTagCompound();
+            double[] arrayPhi = phi[i].arrayPhi();
+            for (int j = 0; j < arrayPhi.length; ++j) {
+                nbt.setDouble("Phi"+j, arrayPhi[j]);
+            }
+            nbt.setInteger("PhiSize", arrayPhi.length);
+            double[] arrayA = phi[i].arrayA();
+            for (int j = 0; j < arrayPhi.length; ++j) {
+                nbt.setDouble("A"+j, arrayA[j]);
+            }
+            nbt.setInteger("ASize", arrayA.length);
+            compound.setTag("Phi"+i, nbt);
         }
         compound.setDouble("Resistance", R);
         return super.writeToNBT(compound);
@@ -60,6 +85,12 @@ public class TileEntityWireBase extends TileEntity {
         return compound;
     }
 
+    @Nullable
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TextComponentString(name);
+    }
+
     public double getResistance() {
         return R;
     }
@@ -69,7 +100,7 @@ public class TileEntityWireBase extends TileEntity {
     }
 
     public double getU() {
-        return Math.abs(phi[1]-phi[0]);
+        return FuncSin.add(phi[0], phi[1].getOpposite()).getEffective();
     }
 
     public double getI() {
@@ -80,16 +111,11 @@ public class TileEntityWireBase extends TileEntity {
         return getU()*getI();
     }
 
-    public void setPhi(double phiA, double phiB) {
-        this.phi[1] = phiA;
-        this.phi[0] = phiB;
-    }
-
-    public void setPhi(double phi, int index) {
+    public void setPhi(FuncSin phi, int index) {
         this.phi[index] = phi;
     }
 
-    public void setPhi(double phi[]) {
+    public void setPhi(FuncSin phi[]) {
         this.phi = phi;
     }
 
@@ -104,5 +130,7 @@ public class TileEntityWireBase extends TileEntity {
         }
         return EnumFacing.NORTH;
     }
+
+
 
 }

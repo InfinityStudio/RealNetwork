@@ -2,6 +2,7 @@ package infstudio.realnetwork.core;
 
 import infstudio.realnetwork.block.BlockWireBase;
 import infstudio.realnetwork.tileentity.*;
+import infstudio.realnetwork.util.FuncSin;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -29,6 +30,7 @@ public class NetWork {
     private Map<BlockPos, Integer> map;
     private Graph G1, G2;
     private double matrix[][];
+    private FuncSin b[];
     private boolean bccPositive[];
 
     public NetWork(World worldIn, BlockPos pos) {
@@ -52,7 +54,7 @@ public class NetWork {
     }
 
     private void initGraph(Node u) {
-        ((TileEntityWireBase)worldIn.getTileEntity(u.getPos())).setPhi(new double[] {0, 0, 0, 0, 0, 0, 0});
+        ((TileEntityWireBase)worldIn.getTileEntity(u.getPos())).setPhi(new FuncSin[] {new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin()});
         worldIn.notifyBlockUpdate(u.getPos(), worldIn.getBlockState(u.getPos()), worldIn.getBlockState(u.getPos()), 2);
         if (worldIn.getTileEntity(u.getPos()) instanceof TileEntityWire) {
             for (int i = 0; i < 6; ++i) {
@@ -169,7 +171,11 @@ public class NetWork {
     }
 
     private void initMatrix(int bccNum) {
-        matrix = new double[n][n+1];
+        matrix = new double[n][n];
+        b = new FuncSin[n];
+        for (int i = 0; i < b.length; ++i) {
+            b[i] = new FuncSin();
+        }
         bccPositive = new boolean[bccCnt+1];
         for (int p = 0; p < n; ++p) {
             Node u = nodeList.get(p);
@@ -188,7 +194,7 @@ public class NetWork {
                             break;
                         }
                     }
-                    matrix[u.no][n] = tile.getE();
+                    b[u.no] = new FuncSin(tile.getE());
                 } else if (u.index%7 == port[1].getIndex()) {
                     for (int i = 0; i < G2.edges.get(u.index).size(); ++i) {
                         Edge e = G2.edges.get(u.index).get(i);
@@ -244,24 +250,30 @@ public class NetWork {
             r = i;
             for (int j = i+1; j < n; ++j) r = Math.abs(matrix[j][i]) > Math.abs(matrix[r][i]) ? j : r;
             if (Math.abs(matrix[r][i]) < EPS) {
-                if (Math.abs(matrix[r][n]) > EPS) return false;
+                if (b[r].isZero()) return false;
                 else continue;
             }
-            if (r != i) for (int j = 0; j < n+1; ++j) {
-                double temp = matrix[i][j];
-                matrix[i][j] = matrix[r][j];
-                matrix[r][j] = temp;
+            if (r != i) {
+                for (int j = 0; j < n; ++j) {
+                    double temp = matrix[i][j];
+                    matrix[i][j] = matrix[r][j];
+                    matrix[r][j] = temp;
+                }
+                FuncSin temp = b[i];
+                b[i] = b[r];
+                b[r] = temp;
             }
             for (int j = 0; j < n; ++j) {
                 if (j != i) {
                     double x = matrix[j][i]/matrix[i][i];
-                    for (int k = 0; k < n+1; ++k) matrix[j][k] -= x*matrix[i][k];
+                    for (int k = 0; k < n; ++k) matrix[j][k] -= x*matrix[i][k];
+                    b[j].add(FuncSin.multiply(x, b[i]).getOpposite());
                 }
             }
         }
         for (int i = 0; i < n; ++i) {
             if (Math.abs(matrix[i][i]) > EPS) {
-                matrix[i][n] /= matrix[i][i];
+                b[i].multiply(1.0D/matrix[i][i]);
             }
         }
         return true;
@@ -309,7 +321,7 @@ public class NetWork {
                 u = nodeList.get(i);
                 if (bccID.get(u.index) != bccNum) continue;
                 TileEntityWireBase tile = (TileEntityWireBase)worldIn.getTileEntity(u.getPos());
-                tile.setPhi(matrix[i][n], u.index%7);
+                tile.setPhi(b[i], u.index%7);
                 worldIn.notifyBlockUpdate(u.getPos(), worldIn.getBlockState(u.getPos()), worldIn.getBlockState(u.getPos()), 2);
             }
         }

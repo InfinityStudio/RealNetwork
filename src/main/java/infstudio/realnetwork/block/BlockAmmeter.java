@@ -20,7 +20,7 @@ public class BlockAmmeter extends BlockResistance {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityAmmeter(1e-3);
+        return new TileEntityAmmeter(1e-3, getName());
     }
 
     @Override

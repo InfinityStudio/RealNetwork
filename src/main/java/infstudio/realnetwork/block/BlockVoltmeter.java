@@ -19,7 +19,7 @@ public class BlockVoltmeter extends BlockResistance {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityVoltmeter(1e3);
+        return new TileEntityVoltmeter(1e3, getName());
     }
 
     @Override

@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class ContainerMachineBase extends Container {
 
@@ -21,7 +22,12 @@ public class ContainerMachineBase extends Container {
             this.addSlotToContainer(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
     }
-    
+
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+        return null;
+    }
+
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
         return true;

@@ -4,11 +4,11 @@ import infstudio.realnetwork.RealNetwork;
 import infstudio.realnetwork.render.model.ModelMachineBase;
 import infstudio.realnetwork.tileentity.TileEntityMachineBase;
 import infstudio.realnetwork.util.FacingHelper;
-import infstudio.realnetwork.util.TextureHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -16,7 +16,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class RenderMachineBase extends TileEntitySpecialRenderer<TileEntityMachineBase>{
 
     private final ModelMachineBase model = new ModelMachineBase();
-    private TextureHelper helper = new TextureHelper();
     private ResourceLocation frontTexture, baseTexture;
     private float angle;
 
@@ -26,7 +25,7 @@ public class RenderMachineBase extends TileEntitySpecialRenderer<TileEntityMachi
 
     @Override
     public void render(TileEntityMachineBase te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        frontTexture = new ResourceLocation(RealNetwork.MODID+":textures/blocks/machine/"+helper.getNameFromTileEntity(te)+".png");
+        frontTexture = new ResourceLocation(RealNetwork.MODID+":textures/blocks/machine/"+((TextComponentString)te.getDisplayName()).getText()+".png");
 
         EnumFacing facing = te.getFacing();
         switch (facing) {

@@ -1,7 +1,5 @@
 package infstudio.realnetwork.tileentity;
 
-import net.minecraft.util.EnumFacing;
-
 public class TileEntityBEMF extends TileEntityResistance {
 
     protected double BE;
@@ -10,8 +8,8 @@ public class TileEntityBEMF extends TileEntityResistance {
         super();
     }
 
-    public TileEntityBEMF(double R, double BE) {
-        super(R);
+    public TileEntityBEMF(double R, double BE, String name) {
+        super(R, name);
         setBE(BE);
     }
 

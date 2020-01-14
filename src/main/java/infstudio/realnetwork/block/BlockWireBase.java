@@ -52,7 +52,7 @@ public class BlockWireBase extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityWireBase(1e-6);
+        return new TileEntityWireBase(1e-6, name);
     }
 
     @Override

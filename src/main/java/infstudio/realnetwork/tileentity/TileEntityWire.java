@@ -6,8 +6,8 @@ public class TileEntityWire extends TileEntityWireBase {
         super();
     }
 
-    public TileEntityWire(double R) {
-        super(R);
+    public TileEntityWire(double R, String name) {
+        super(R, name);
     }
 
 }

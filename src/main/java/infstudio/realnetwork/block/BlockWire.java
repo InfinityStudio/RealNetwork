@@ -34,7 +34,7 @@ public class BlockWire extends BlockWireBase {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityWire(0.01f);
+        return new TileEntityWire(0.01f, getName());
     }
 
     @Override

@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class BlockLoader {
 
     private static BlockWireBase[] blockList = new BlockWireBase[] {
-            new BlockWire(), new BlockGenerator(), new BlockResistance(), new BlockBEMF(), new BlockAmmeter(), new BlockVoltmeter()
+            new BlockWire(), new BlockGeneratorFurnace(), new BlockResistance(), new BlockBEMF(), new BlockAmmeter(), new BlockVoltmeter()
     };
 
     public BlockLoader() {
@@ -35,7 +35,7 @@ public class BlockLoader {
             event.getRegistry().register(blockList[i]);
         }
         GameRegistry.registerTileEntity(TileEntityWire.class, new ResourceLocation(RealNetwork.MODID, blockList[0].getName()));
-        GameRegistry.registerTileEntity(TileEntityGenerator.class, new ResourceLocation(RealNetwork.MODID, blockList[1].getName()));
+        GameRegistry.registerTileEntity(TileEntityGeneratorFurnace.class, new ResourceLocation(RealNetwork.MODID, blockList[1].getName()));
         GameRegistry.registerTileEntity(TileEntityResistance.class, new ResourceLocation(RealNetwork.MODID, blockList[2].getName()));
         GameRegistry.registerTileEntity(TileEntityBEMF.class, new ResourceLocation(RealNetwork.MODID, blockList[3].getName()));
         GameRegistry.registerTileEntity(TileEntityAmmeter.class, new ResourceLocation(RealNetwork.MODID, blockList[4].getName()));

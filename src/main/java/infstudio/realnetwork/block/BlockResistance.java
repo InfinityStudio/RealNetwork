@@ -14,7 +14,7 @@ public class BlockResistance extends BlockMachineBase {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityResistance(3.0f);
+        return new TileEntityResistance(3.0f, getName());
     }
 
 }
