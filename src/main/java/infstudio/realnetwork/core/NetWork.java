@@ -63,6 +63,9 @@ public class NetWork {
                 if (!(vBlock instanceof BlockWireBase)) continue;
                 if (worldIn.getTileEntity(vPos) instanceof TileEntityMachineBase) {
                     TileEntityMachineBase vTile = (TileEntityMachineBase)worldIn.getTileEntity(vPos);
+                    if (vTile instanceof TileEntitySwitch) {
+                        if (!((TileEntitySwitch)vTile).getStatus()) continue;
+                    }
                     boolean flag = false;
                     for (int j = 0; j < 2; ++j) {
                         if (u.getPos().getX() == vPos.getX()+vTile.getPort()[j].getDirectionVec().getX() && u.getPos().getY() == vPos.getY()+vTile.getPort()[j].getDirectionVec().getY() && u.getPos().getZ() == vPos.getZ()+vTile.getPort()[j].getDirectionVec().getZ()) flag = true;
@@ -93,6 +96,9 @@ public class NetWork {
                 if (!(vBlock instanceof BlockWireBase)) continue;
                 if (worldIn.getTileEntity(vPos) instanceof TileEntityMachineBase) {
                     TileEntityMachineBase vTile = (TileEntityMachineBase)worldIn.getTileEntity(vPos);
+                    if (vTile instanceof TileEntitySwitch) {
+                        if (!((TileEntitySwitch)vTile).getStatus()) continue;
+                    }
                     boolean flag = false;
                     for (int j = 0; j < 2; ++j) {
                         if (u.getPos().getX() == vPos.getX()+vTile.getPort()[j].getDirectionVec().getX() && u.getPos().getY() == vPos.getY()+vTile.getPort()[j].getDirectionVec().getY() && u.getPos().getZ() == vPos.getZ()+vTile.getPort()[j].getDirectionVec().getZ()) flag = true;
@@ -255,7 +261,7 @@ public class NetWork {
             r = i;
             for (int j = i+1; j < n; ++j) r = Math.abs(matrix[j][i]) > Math.abs(matrix[r][i]) ? j : r;
             if (Math.abs(matrix[r][i]) < EPS) {
-                if (b[r].isZero()) return false;
+                if (!b[r].isZero()) return false;
                 else continue;
             }
             if (r != i) {

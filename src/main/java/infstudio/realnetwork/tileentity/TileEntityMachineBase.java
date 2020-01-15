@@ -7,6 +7,7 @@ import net.minecraft.util.EnumFacing;
 
 public class TileEntityMachineBase extends TileEntityWireBase {
 
+    protected double EPS = 1e-8;
     protected EnumFacing port[] = new EnumFacing[2];
     protected EnumFacing facing;
 
@@ -63,6 +64,10 @@ public class TileEntityMachineBase extends TileEntityWireBase {
 
     public void setPort(EnumFacing facing, int index) {
         this.port[index] = facing;
+    }
+
+    public boolean isWorking() {
+        return getI() > EPS;
     }
 
 }

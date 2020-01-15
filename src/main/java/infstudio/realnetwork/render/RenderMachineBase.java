@@ -25,7 +25,11 @@ public class RenderMachineBase extends TileEntitySpecialRenderer<TileEntityMachi
 
     @Override
     public void render(TileEntityMachineBase te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        frontTexture = new ResourceLocation(RealNetwork.MODID+":textures/blocks/machine/"+((TextComponentString)te.getDisplayName()).getText()+".png");
+        if (te.isWorking()) {
+            frontTexture = new ResourceLocation(RealNetwork.MODID+":textures/blocks/machine/"+((TextComponentString)te.getDisplayName()).getText()+"_on.png");
+        } else {
+            frontTexture = new ResourceLocation(RealNetwork.MODID+":textures/blocks/machine/"+((TextComponentString)te.getDisplayName()).getText()+"_off.png");
+        }
 
         EnumFacing facing = te.getFacing();
         switch (facing) {

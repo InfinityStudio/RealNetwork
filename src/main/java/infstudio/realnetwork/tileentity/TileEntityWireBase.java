@@ -22,7 +22,6 @@ public class TileEntityWireBase extends TileEntity {
     }
 
     public TileEntityWireBase(double R, String name) {
-        setPhi(new FuncSin[7]);
         setResistance(R);
         this.name = name;
     }

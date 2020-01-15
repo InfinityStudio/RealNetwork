@@ -39,4 +39,9 @@ public class TileEntitySwitch extends TileEntityMachineBase {
         this.setStatus(!this.status);
     }
 
+    @Override
+    public boolean isWorking() {
+        return this.status;
+    }
+
 }
