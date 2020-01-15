@@ -2,8 +2,10 @@ package infstudio.realnetwork.gui;
 
 import infstudio.realnetwork.RealNetwork;
 import infstudio.realnetwork.container.ContainerAmmeter;
+import infstudio.realnetwork.container.ContainerSwitch;
 import infstudio.realnetwork.container.ContainerVoltmeter;
 import infstudio.realnetwork.tileentity.TileEntityAmmeter;
+import infstudio.realnetwork.tileentity.TileEntitySwitch;
 import infstudio.realnetwork.tileentity.TileEntityVoltmeter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -17,6 +19,7 @@ public class GuiLoader implements IGuiHandler {
 
     public static final int GUI_AMMETER = 1;
     public static final int GUI_VOLTMETER = 2;
+    public static final int GUI_SWITCH = 3;
 
     public GuiLoader() {
         NetworkRegistry.INSTANCE.registerGuiHandler(RealNetwork.MODID, this);
@@ -28,6 +31,7 @@ public class GuiLoader implements IGuiHandler {
         switch (ID) {
             case GUI_AMMETER: return new ContainerAmmeter(player.inventory, (TileEntityAmmeter)world.getTileEntity(new BlockPos(x, y, z)));
             case GUI_VOLTMETER: return new ContainerVoltmeter(player.inventory, (TileEntityVoltmeter)world.getTileEntity(new BlockPos(x, y, z)));
+            case GUI_SWITCH: return new ContainerSwitch(player.inventory, (TileEntitySwitch)world.getTileEntity(new BlockPos(x, y, z)));
             default: return null;
         }
     }
@@ -38,6 +42,7 @@ public class GuiLoader implements IGuiHandler {
         switch (ID) {
             case GUI_AMMETER: return new GuiAmmeter(new ContainerAmmeter(player.inventory, (TileEntityAmmeter)world.getTileEntity(new BlockPos(x, y, z))));
             case GUI_VOLTMETER: return new GuiVoltmeter(new ContainerVoltmeter(player.inventory, (TileEntityVoltmeter)world.getTileEntity(new BlockPos(x, y, z))));
+            case GUI_SWITCH: return new GuiSwitch(new ContainerSwitch(player.inventory, (TileEntitySwitch)world.getTileEntity(new BlockPos(x, y, z))));
             default: return null;
         }
     }

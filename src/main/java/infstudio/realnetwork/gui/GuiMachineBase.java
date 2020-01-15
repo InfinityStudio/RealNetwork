@@ -1,7 +1,7 @@
 package infstudio.realnetwork.gui;
 
 import infstudio.realnetwork.container.ContainerMachineBase;
-import infstudio.realnetwork.network.MessageFacing;
+import infstudio.realnetwork.network.MessageMachineBase;
 import infstudio.realnetwork.network.NetworkLoader;
 import infstudio.realnetwork.tileentity.TileEntityGenerator;
 import infstudio.realnetwork.util.EnumRelativeFacing;
@@ -101,7 +101,7 @@ public class GuiMachineBase extends GuiContainer {
                         container.getTileMachine().setPort(facing[1], 1);
                         String success = "change successfully";
                         this.fontRenderer.drawString(success, offsetX+17, offsetY+65, 4210752);
-                        MessageFacing message = new MessageFacing(container.getTileMachine().writeToNBT(new NBTTagCompound()), container.getTileMachine().getPos());
+                        MessageMachineBase message = new MessageMachineBase(container.getTileMachine().writeToNBT(new NBTTagCompound()), container.getTileMachine().getPos());
                         NetworkLoader.instance.sendToServer(message);
                     } else {
                         String fail = I18n.format("gui.change_port_fail");
@@ -110,7 +110,13 @@ public class GuiMachineBase extends GuiContainer {
                 }
                 break;
             }
-            default: ((GuiButtonFacing)button).changeStatus();
+            case buttonLeft:
+            case buttonRight:
+            case buttonTop:
+            case buttonBottom:
+            case buttonBack:
+                ((GuiButtonFacing)button).changeStatus(); break;
+
         }
     }
 

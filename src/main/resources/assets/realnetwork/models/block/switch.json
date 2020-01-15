@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "realnetwork:blocks/machine/side",
+    "north": "realnetwork:blocks/machine/switch_front",
+    "south": "realnetwork:blocks/machine/side",
+    "east": "realnetwork:blocks/machine/port",
+    "west": "realnetwork:blocks/machine/port",
+    "up": "realnetwork:blocks/machine/side",
+    "down": "realnetwork:blocks/machine/side"
+  }
+}

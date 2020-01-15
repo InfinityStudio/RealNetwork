@@ -65,4 +65,8 @@ public class BlockWireBase extends BlockContainer {
         return false;
     }
 
+    public Class getTileEntity() {
+        return TileEntityWireBase.class;
+    }
+
 }

@@ -26,4 +26,9 @@ public class BlockMachineBase extends BlockWireBase {
         return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
+    @Override
+    public Class getTileEntity() {
+        return TileEntityMachineBase.class;
+    }
+
 }

@@ -81,6 +81,11 @@ public class NetWork {
                 }
             }
         } else if (worldIn.getTileEntity(u.getPos()) instanceof TileEntityMachineBase) {
+            if (worldIn.getTileEntity(u.getPos()) instanceof TileEntitySwitch) {
+                if (!((TileEntitySwitch)worldIn.getTileEntity(u.getPos())).getStatus()) {
+                    return;
+                }
+            }
             TileEntityMachineBase uTile = (TileEntityMachineBase)worldIn.getTileEntity(u.getPos());
             for (int i = 0; i < 2; ++i) {
                 BlockPos vPos = new BlockPos(u.getPos().getX()+uTile.getPort()[i].getDirectionVec().getX(), u.getPos().getY()+uTile.getPort()[i].getDirectionVec().getY(), u.getPos().getZ()+uTile.getPort()[i].getDirectionVec().getZ());

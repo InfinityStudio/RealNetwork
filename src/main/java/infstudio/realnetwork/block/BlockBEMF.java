@@ -17,4 +17,9 @@ public class BlockBEMF extends BlockResistance {
         return new TileEntityBEMF(3.0f, 3.0f, getName());
     }
 
+    @Override
+    public Class getTileEntity() {
+        return TileEntityBEMF.class;
+    }
+
 }

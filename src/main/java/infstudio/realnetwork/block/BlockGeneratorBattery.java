@@ -16,4 +16,9 @@ public class BlockGeneratorBattery extends BlockGenerator {
         return new TileEntityGeneratorBattery(1.0D, 0.0D, 0.0D, getName());
     }
 
+    @Override
+    public Class getTileEntity() {
+        return TileEntityGeneratorBattery.class;
+    }
+
 }

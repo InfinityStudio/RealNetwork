@@ -90,4 +90,9 @@ public class BlockWire extends BlockWireBase {
         return BlockFaceShape.UNDEFINED;
     }
 
+    @Override
+    public Class getTileEntity() {
+        return TileEntityWire.class;
+    }
+
 }

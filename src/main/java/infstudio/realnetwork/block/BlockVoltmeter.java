@@ -31,4 +31,9 @@ public class BlockVoltmeter extends BlockResistance {
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
 
+    @Override
+    public Class getTileEntity() {
+        return TileEntityVoltmeter.class;
+    }
+
 }

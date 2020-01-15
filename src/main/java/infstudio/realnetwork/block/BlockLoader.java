@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class BlockLoader {
 
     private static BlockWireBase[] blockList = new BlockWireBase[] {
-            new BlockWire(), new BlockGeneratorFurnace(), new BlockResistance(), new BlockBEMF(), new BlockAmmeter(), new BlockVoltmeter()
+            new BlockWire(), new BlockGeneratorFurnace(), new BlockResistance(), new BlockBEMF(), new BlockAmmeter(), new BlockVoltmeter(), new BlockSwitch()
     };
 
     public BlockLoader() {
@@ -33,13 +33,8 @@ public class BlockLoader {
         for (int i = 0; i < blockList.length; ++i) {
             blockList[i].setRegistryName(RealNetwork.MODID, blockList[i].getName());
             event.getRegistry().register(blockList[i]);
+            GameRegistry.registerTileEntity(blockList[i].getTileEntity(), new ResourceLocation(RealNetwork.MODID, blockList[i].getName()));
         }
-        GameRegistry.registerTileEntity(TileEntityWire.class, new ResourceLocation(RealNetwork.MODID, blockList[0].getName()));
-        GameRegistry.registerTileEntity(TileEntityGeneratorFurnace.class, new ResourceLocation(RealNetwork.MODID, blockList[1].getName()));
-        GameRegistry.registerTileEntity(TileEntityResistance.class, new ResourceLocation(RealNetwork.MODID, blockList[2].getName()));
-        GameRegistry.registerTileEntity(TileEntityBEMF.class, new ResourceLocation(RealNetwork.MODID, blockList[3].getName()));
-        GameRegistry.registerTileEntity(TileEntityAmmeter.class, new ResourceLocation(RealNetwork.MODID, blockList[4].getName()));
-        GameRegistry.registerTileEntity(TileEntityVoltmeter.class, new ResourceLocation(RealNetwork.MODID, blockList[5].getName()));
     }
 
     @SubscribeEvent

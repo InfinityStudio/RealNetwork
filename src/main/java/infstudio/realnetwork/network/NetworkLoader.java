@@ -13,7 +13,7 @@ public class NetworkLoader {
     private static int ID = 0;
 
     public NetworkLoader() {
-        registerMessage(MessageFacing.Handler.class, MessageFacing.class, Side.SERVER);
+        registerMessage(MessageMachineBase.Handler.class, MessageMachineBase.class, Side.SERVER);
     }
 
     private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<REQ> requestMessageType, Side side) {

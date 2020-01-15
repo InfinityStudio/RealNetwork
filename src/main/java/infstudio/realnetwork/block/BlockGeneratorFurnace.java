@@ -16,4 +16,9 @@ public class BlockGeneratorFurnace extends BlockGenerator {
         return new TileEntityGeneratorFurnace(0.1D, 6.0D, 0.0D, getName());
     }
 
+    @Override
+    public Class getTileEntity() {
+        return TileEntityGeneratorFurnace.class;
+    }
+
 }
