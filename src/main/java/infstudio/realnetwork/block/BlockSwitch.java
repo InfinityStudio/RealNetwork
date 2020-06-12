@@ -1,7 +1,7 @@
 package infstudio.realnetwork.block;
 
 import infstudio.realnetwork.RealNetwork;
-import infstudio.realnetwork.gui.GuiLoader;
+import infstudio.realnetwork.client.gui.GuiLoader;
 import infstudio.realnetwork.tileentity.TileEntitySwitch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,7 +20,7 @@ public class BlockSwitch extends BlockMachineBase {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntitySwitch(0.01D, getName());
+        return new TileEntitySwitch(1e-8, getName());
     }
 
     @Override

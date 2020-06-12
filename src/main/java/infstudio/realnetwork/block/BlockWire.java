@@ -34,7 +34,7 @@ public class BlockWire extends BlockWireBase {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityWire(0.01f, getName());
+        return new TileEntityWire(1e-8, getName());
     }
 
     @Override
@@ -77,7 +77,7 @@ public class BlockWire extends BlockWireBase {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return PILLAR_AABB;
+        return new AxisAlignedBB(0.25D, 0.25D, 0.25D, 0.75D, 0.75D, 0.75D);
     }
 
     @Override

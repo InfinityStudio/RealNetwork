@@ -1,8 +1,9 @@
 package infstudio.realnetwork;
 
+import infstudio.realnetwork.block.BlockGenerator;
 import infstudio.realnetwork.common.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -28,7 +29,7 @@ public class RealNetwork {
         @Override
         @SideOnly(Side.CLIENT)
         public ItemStack getTabIconItem() {
-            return new ItemStack(Items.APPLE);
+            return new ItemStack(Item.getItemFromBlock(new BlockGenerator()));
         }
     };
 

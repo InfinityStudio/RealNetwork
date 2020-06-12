@@ -1,7 +1,7 @@
 package infstudio.realnetwork.block;
 
 import infstudio.realnetwork.RealNetwork;
-import infstudio.realnetwork.gui.GuiLoader;
+import infstudio.realnetwork.client.gui.GuiLoader;
 import infstudio.realnetwork.tileentity.TileEntityAmmeter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

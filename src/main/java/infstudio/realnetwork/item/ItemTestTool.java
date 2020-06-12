@@ -16,8 +16,8 @@ public class ItemTestTool extends Item {
 
     public ItemTestTool() {
         super();
-        setRegistryName("testtool");
-        setUnlocalizedName("testtool");
+        setRegistryName("test_tool");
+        setUnlocalizedName("test_tool");
         setCreativeTab(RealNetwork.rnTab);
     }
 

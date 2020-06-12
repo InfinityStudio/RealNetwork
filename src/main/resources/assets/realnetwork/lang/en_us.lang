@@ -1,0 +1,16 @@
+itemGroup.realnetwork=Real Network
+
+item.tool.name=Tool
+item.test_tool.name=Test Tool
+
+tile.ammeter.name=Ammeter
+tile.generator.name=Generator
+tile.generator_battery.name=Battery Generator
+tile.generator_furnace.name=Battery Furnace
+tile.resistance.name=Resistance
+tile.switch.name=Switch
+tile.voltmeter.name=Voltmeter
+tile.wire.name=Wire
+
+gui.change_port_success=Change successfully
+gui.change_port_fail=Change failed

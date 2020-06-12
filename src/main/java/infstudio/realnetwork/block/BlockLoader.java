@@ -1,8 +1,8 @@
 package infstudio.realnetwork.block;
 
 import infstudio.realnetwork.RealNetwork;
-import infstudio.realnetwork.render.RenderMachineBase;
-import infstudio.realnetwork.render.RenderWire;
+import infstudio.realnetwork.client.render.RenderMachineBase;
+import infstudio.realnetwork.client.render.RenderWire;
 import infstudio.realnetwork.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class BlockLoader {
 
     private static BlockWireBase[] blockList = new BlockWireBase[] {
-            new BlockWire(), new BlockGeneratorFurnace(), new BlockResistance(), new BlockBEMF(), new BlockAmmeter(), new BlockVoltmeter(), new BlockSwitch()
+            new BlockWire(), new BlockGenerator(), new BlockGeneratorFurnace(), new BlockResistance(), new BlockAmmeter(), new BlockVoltmeter(), new BlockSwitch()
     };
 
     public BlockLoader() {
