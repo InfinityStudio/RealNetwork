@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 @Mod.EventBusSubscriber(modid = RealNetwork.MODID)
 public class BlockLoader {
 
-    private static BlockWireBase[] blockList = new BlockWireBase[] {
+    public static BlockWireBase[] blockList = new BlockWireBase[] {
             new BlockWire(), new BlockGenerator(), new BlockGeneratorFurnace(), new BlockResistance(), new BlockAmmeter(), new BlockVoltmeter(), new BlockSwitch()
     };
 
