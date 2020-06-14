@@ -1,6 +1,6 @@
 package infstudio.realnetwork;
 
-import infstudio.realnetwork.block.BlockGenerator;
+import infstudio.realnetwork.block.BlockLoader;
 import infstudio.realnetwork.common.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -29,7 +29,7 @@ public class RealNetwork {
         @Override
         @SideOnly(Side.CLIENT)
         public ItemStack createIcon() {
-            return new ItemStack(Item.getItemFromBlock(new BlockGenerator()));
+            return new ItemStack(Item.getItemFromBlock(BlockLoader.blockList[1]));
         }
     };
 
