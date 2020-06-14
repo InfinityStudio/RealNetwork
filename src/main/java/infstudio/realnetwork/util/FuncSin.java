@@ -1,20 +1,21 @@
 package infstudio.realnetwork.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import it.unimi.dsi.fastutil.doubles.Double2IntMap;
+import it.unimi.dsi.fastutil.doubles.Double2IntOpenHashMap;
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleList;
 
 public class FuncSin {
 
     private static final double EPS = 1e-8;
-    public Map<Double, Integer> map;
-    public ArrayList<Double> A;
-    public ArrayList<Double> phi;
+    public Double2IntMap map;
+    public DoubleList A;
+    public DoubleList phi;
 
     public FuncSin() {
-        map = new HashMap<Double, Integer>();
-        A = new ArrayList<>();
-        phi = new ArrayList<>();
+        map = new Double2IntOpenHashMap();
+        A = new DoubleArrayList();
+        phi = new DoubleArrayList();
     }
 
     public FuncSin(double[] phi, double[] A) {
@@ -36,7 +37,7 @@ public class FuncSin {
     public FuncSin(FuncSin fs) {
         this();
         for (int i = 0; i < fs.phi.size(); ++i) {
-            this.map.put(fs.phi.get(i), i);
+            this.map.put(fs.phi.getDouble(i), i);
             this.phi.add(fs.phi.get(i));
             this.A.add(fs.A.get(i));
         }
@@ -50,7 +51,7 @@ public class FuncSin {
             } else {
                 this.phi.add(fs.phi.get(i));
                 this.A.add(fs.A.get(i));
-                this.map.put(fs.phi.get(i), this.phi.size()-1);
+                this.map.put(fs.phi.getDouble(i), this.phi.size()-1);
             }
         }
     }

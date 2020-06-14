@@ -24,7 +24,7 @@ public class BlockWireBase extends BlockContainer {
     public void setName(String name) {
         this.name = name;
         setCreativeTab(RealNetwork.rnTab);
-        setUnlocalizedName(name);
+        setTranslationKey(name);
     }
 
     public String getName() {

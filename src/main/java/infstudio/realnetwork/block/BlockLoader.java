@@ -40,7 +40,7 @@ public class BlockLoader {
     @SubscribeEvent
     public static void registerItem(RegistryEvent.Register<Item> event) {
         for (int i = 0; i < blockList.length; ++i) {
-            event.getRegistry().register(new ItemBlock(blockList[i]).setRegistryName(blockList[i].getRegistryName()).setCreativeTab(blockList[i].getCreativeTabToDisplayOn()).setUnlocalizedName(blockList[i].getUnlocalizedName()));
+            event.getRegistry().register(new ItemBlock(blockList[i]).setRegistryName(blockList[i].getRegistryName()).setCreativeTab(blockList[i].getCreativeTab()).setTranslationKey(blockList[i].getTranslationKey()));
         }
     }
 

@@ -17,7 +17,7 @@ public class ItemTool extends Item {
     public ItemTool() {
         super();
         setRegistryName("tool");
-        setUnlocalizedName("tool");
+        setTranslationKey("tool");
         setCreativeTab(RealNetwork.rnTab);
     }
 

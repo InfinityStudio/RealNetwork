@@ -28,7 +28,7 @@ public class RealNetwork {
     public static CreativeTabs rnTab = new CreativeTabs(MODID) {
         @Override
         @SideOnly(Side.CLIENT)
-        public ItemStack getTabIconItem() {
+        public ItemStack createIcon() {
             return new ItemStack(Item.getItemFromBlock(new BlockGenerator()));
         }
     };

@@ -2,7 +2,6 @@ package infstudio.realnetwork.item;
 
 import infstudio.realnetwork.RealNetwork;
 import infstudio.realnetwork.tileentity.TileEntityMachineBase;
-import infstudio.realnetwork.tileentity.TileEntityResistance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
@@ -17,7 +16,7 @@ public class ItemTestTool extends Item {
     public ItemTestTool() {
         super();
         setRegistryName("test_tool");
-        setUnlocalizedName("test_tool");
+        setTranslationKey("test_tool");
         setCreativeTab(RealNetwork.rnTab);
     }
 

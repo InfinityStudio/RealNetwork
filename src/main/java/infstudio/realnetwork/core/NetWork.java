@@ -3,14 +3,19 @@ package infstudio.realnetwork.core;
 import infstudio.realnetwork.block.BlockWireBase;
 import infstudio.realnetwork.tileentity.*;
 import infstudio.realnetwork.util.FuncSin;
+import it.unimi.dsi.fastutil.booleans.BooleanArrayList;
+import it.unimi.dsi.fastutil.booleans.BooleanList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 
 public class NetWork {
@@ -23,11 +28,11 @@ public class NetWork {
     private ArrayList<ArrayList<Node>> bcc;
     private ArrayList<Node> nodeList;
     private int cnt, clock, bccCnt, n;
-    private ArrayList<Integer> dfn, low, bccID;
-    private ArrayList<Boolean> vis;
+    private IntList dfn, low, bccID;
+    private BooleanList vis;
     private boolean isBridge[][];
     private Stack<Node> stack;
-    private Map<BlockPos, Integer> map;
+    private Object2IntMap<BlockPos> map;
     private Graph G1, G2;
     private double matrix[][];
     private FuncSin b[];
@@ -56,19 +61,21 @@ public class NetWork {
     private void initGraph(Node u) {
         ((TileEntityWireBase)worldIn.getTileEntity(u.getPos())).setPhi(new FuncSin[] {new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin()});
         worldIn.notifyBlockUpdate(u.getPos(), worldIn.getBlockState(u.getPos()), worldIn.getBlockState(u.getPos()), 2);
-        if (worldIn.getTileEntity(u.getPos()) instanceof TileEntityWire) {
+        TileEntity uTile = worldIn.getTileEntity(u.getPos());
+        if (uTile instanceof TileEntityWire) {
             for (int i = 0; i < 6; ++i) {
                 BlockPos vPos = new BlockPos(u.getPos().getX()+dir[i][0], u.getPos().getY()+dir[i][1], u.getPos().getZ()+dir[i][2]);
                 Block vBlock = worldIn.getBlockState(vPos).getBlock();
                 if (!(vBlock instanceof BlockWireBase)) continue;
-                if (worldIn.getTileEntity(vPos) instanceof TileEntityMachineBase) {
-                    TileEntityMachineBase vTile = (TileEntityMachineBase)worldIn.getTileEntity(vPos);
-                    if (vTile instanceof TileEntitySwitch) {
-                        if (!((TileEntitySwitch)vTile).getStatus()) continue;
+                TileEntity vTile = worldIn.getTileEntity(vPos);
+                if (vTile != null) {
+                    TileEntityMachineBase machine = (TileEntityMachineBase)vTile;
+                    if (machine instanceof TileEntitySwitch) {
+                        if (!((TileEntitySwitch)machine).getStatus()) continue;
                     }
                     boolean flag = false;
                     for (int j = 0; j < 2; ++j) {
-                        if (u.getPos().getX() == vPos.getX()+vTile.getPort()[j].getDirectionVec().getX() && u.getPos().getY() == vPos.getY()+vTile.getPort()[j].getDirectionVec().getY() && u.getPos().getZ() == vPos.getZ()+vTile.getPort()[j].getDirectionVec().getZ()) flag = true;
+                        if (u.getPos().getX() == vPos.getX()+machine.getPort()[j].getDirectionVec().getX() && u.getPos().getY() == vPos.getY()+machine.getPort()[j].getDirectionVec().getY() && u.getPos().getZ() == vPos.getZ()+machine.getPort()[j].getDirectionVec().getZ()) flag = true;
                     }
                     if (!flag) continue;
                 }
@@ -83,15 +90,15 @@ public class NetWork {
                     G1.addEdge(u, v, 0, getFaceByIndex(i));
                 }
             }
-        } else if (worldIn.getTileEntity(u.getPos()) instanceof TileEntityMachineBase) {
-            if (worldIn.getTileEntity(u.getPos()) instanceof TileEntitySwitch) {
-                if (!((TileEntitySwitch)worldIn.getTileEntity(u.getPos())).getStatus()) {
+        } else if (uTile instanceof TileEntityMachineBase) {
+            if (uTile instanceof TileEntitySwitch) {
+                if (!((TileEntitySwitch)uTile).getStatus()) {
                     return;
                 }
             }
-            TileEntityMachineBase uTile = (TileEntityMachineBase)worldIn.getTileEntity(u.getPos());
+            TileEntityMachineBase uMachine = (TileEntityMachineBase)uTile;
             for (int i = 0; i < 2; ++i) {
-                BlockPos vPos = new BlockPos(u.getPos().getX()+uTile.getPort()[i].getDirectionVec().getX(), u.getPos().getY()+uTile.getPort()[i].getDirectionVec().getY(), u.getPos().getZ()+uTile.getPort()[i].getDirectionVec().getZ());
+                BlockPos vPos = new BlockPos(u.getPos().getX()+uMachine.getPort()[i].getDirectionVec().getX(), u.getPos().getY()+uMachine.getPort()[i].getDirectionVec().getY(), u.getPos().getZ()+uMachine.getPort()[i].getDirectionVec().getZ());
                 Block vBlock = worldIn.getBlockState(vPos).getBlock();
                 if (!(vBlock instanceof BlockWireBase)) continue;
                 if (worldIn.getTileEntity(vPos) instanceof TileEntityMachineBase) {
@@ -109,11 +116,11 @@ public class NetWork {
                 if (map.get(vPos) == null) {
                     v = new Node(++cnt, vPos);
                     map.put(vPos, cnt);
-                    G1.addEdge(u, v, 0, uTile.getPort()[i]);
+                    G1.addEdge(u, v, 0, uMachine.getPort()[i]);
                     initGraph(v);
                 } else {
                     v = new Node(map.get(vPos), vPos);
-                    G1.addEdge(u, v, 0, uTile.getPort()[i]);
+                    G1.addEdge(u, v, 0, uMachine.getPort()[i]);
                 }
             }
         }
@@ -291,14 +298,14 @@ public class NetWork {
     }
 
     private void initNetWork() {
-        vis = new ArrayList<>();
+        vis = new BooleanArrayList();
         nodeList = new ArrayList<>();
-        dfn = new ArrayList<>();
-        low = new ArrayList<>();
-        bccID = new ArrayList<>();
+        dfn = new IntArrayList();
+        low = new IntArrayList();
+        bccID = new IntArrayList();
         stack = new Stack<>();
         bcc = new ArrayList<>();
-        map = new HashMap<BlockPos, Integer>();
+        map = new Object2IntOpenHashMap<>();
         G1 = new Graph();
         G2 = new Graph();
         cnt = 0;
