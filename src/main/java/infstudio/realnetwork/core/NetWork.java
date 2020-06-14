@@ -69,15 +69,17 @@ public class NetWork {
                 if (!(vBlock instanceof BlockWireBase)) continue;
                 TileEntity vTile = worldIn.getTileEntity(vPos);
                 if (vTile != null) {
-                    TileEntityMachineBase machine = (TileEntityMachineBase)vTile;
-                    if (machine instanceof TileEntitySwitch) {
-                        if (!((TileEntitySwitch)machine).getStatus()) continue;
+                    if (vTile instanceof TileEntityMachineBase) {
+                        TileEntityMachineBase machine = (TileEntityMachineBase)vTile;
+                        if (machine instanceof TileEntitySwitch) {
+                            if (!((TileEntitySwitch)machine).getStatus()) continue;
+                        }
+                        boolean flag = false;
+                        for (int j = 0; j < 2; ++j) {
+                            if (u.getPos().getX() == vPos.getX()+machine.getPort()[j].getDirectionVec().getX() && u.getPos().getY() == vPos.getY()+machine.getPort()[j].getDirectionVec().getY() && u.getPos().getZ() == vPos.getZ()+machine.getPort()[j].getDirectionVec().getZ()) flag = true;
+                        }
+                        if (!flag) continue;
                     }
-                    boolean flag = false;
-                    for (int j = 0; j < 2; ++j) {
-                        if (u.getPos().getX() == vPos.getX()+machine.getPort()[j].getDirectionVec().getX() && u.getPos().getY() == vPos.getY()+machine.getPort()[j].getDirectionVec().getY() && u.getPos().getZ() == vPos.getZ()+machine.getPort()[j].getDirectionVec().getZ()) flag = true;
-                    }
-                    if (!flag) continue;
                 }
                 Node v;
                 if (map.get(vPos) == null) {
@@ -102,15 +104,20 @@ public class NetWork {
                 Block vBlock = worldIn.getBlockState(vPos).getBlock();
                 if (!(vBlock instanceof BlockWireBase)) continue;
                 if (worldIn.getTileEntity(vPos) instanceof TileEntityMachineBase) {
-                    TileEntityMachineBase vTile = (TileEntityMachineBase)worldIn.getTileEntity(vPos);
-                    if (vTile instanceof TileEntitySwitch) {
-                        if (!((TileEntitySwitch)vTile).getStatus()) continue;
+                    TileEntity vTile = worldIn.getTileEntity(vPos);
+                    if (vTile != null) {
+                        if (vTile instanceof TileEntityMachineBase) {
+                            TileEntityMachineBase machine = (TileEntityMachineBase)vTile;
+                            if (machine instanceof TileEntitySwitch) {
+                                if (!((TileEntitySwitch)machine).getStatus()) continue;
+                            }
+                            boolean flag = false;
+                            for (int j = 0; j < 2; ++j) {
+                                if (u.getPos().getX() == vPos.getX()+machine.getPort()[j].getDirectionVec().getX() && u.getPos().getY() == vPos.getY()+machine.getPort()[j].getDirectionVec().getY() && u.getPos().getZ() == vPos.getZ()+machine.getPort()[j].getDirectionVec().getZ()) flag = true;
+                            }
+                            if (!flag) continue;
+                        }
                     }
-                    boolean flag = false;
-                    for (int j = 0; j < 2; ++j) {
-                        if (u.getPos().getX() == vPos.getX()+vTile.getPort()[j].getDirectionVec().getX() && u.getPos().getY() == vPos.getY()+vTile.getPort()[j].getDirectionVec().getY() && u.getPos().getZ() == vPos.getZ()+vTile.getPort()[j].getDirectionVec().getZ()) flag = true;
-                    }
-                    if (!flag) continue;
                 }
                 Node v;
                 if (map.get(vPos) == null) {
