@@ -13,7 +13,7 @@ public class BlockGeneratorBattery extends BlockGenerator {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityGeneratorBattery(1.0D, 0.0D, 0.0D, getName());
+        return new TileEntityGeneratorBattery(1.0D, 0.0D, 0.0D, 2000.0D, getName());
     }
 
     @Override

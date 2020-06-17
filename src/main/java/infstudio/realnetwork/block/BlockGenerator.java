@@ -20,7 +20,7 @@ public class BlockGenerator extends BlockMachineBase {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityGenerator(0.1D, 6.0D, 0.0D, getName());
+        return new TileEntityGenerator(0.1D, 6.0D, 0.0D, Double.MAX_VALUE, getName());
     }
 
     @Override

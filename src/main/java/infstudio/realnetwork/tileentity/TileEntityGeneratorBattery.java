@@ -6,8 +6,8 @@ public class TileEntityGeneratorBattery extends TileEntityGenerator {
         super();
     }
 
-    public TileEntityGeneratorBattery(double R, double Em, double phi, String name) {
-        super(R, Em, phi, name);
+    public TileEntityGeneratorBattery(double R, double Em, double phi, double capacity, String name) {
+        super(R, Em, phi, capacity, name);
     }
 
 }

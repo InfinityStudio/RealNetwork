@@ -6,15 +6,17 @@ import net.minecraft.util.EnumFacing;
 
 public class TileEntityGenerator extends TileEntityMachineBase {
 
-    private FuncSin E;
+    protected FuncSin E;
+    protected double energy = 0, energyCapacity;
 
     public TileEntityGenerator() {
         super();
     }
 
-    public TileEntityGenerator(double R, double Em, double phi, String name) {
+    public TileEntityGenerator(double R, double Em, double phi, double capacity, String name) {
         super(R, name);
         setE(Em, phi);
+        setEnergyCapacity(capacity);
     }
 
     @Override
@@ -30,6 +32,8 @@ public class TileEntityGenerator extends TileEntityMachineBase {
             arrayA[j] = nbt.getDouble("A"+j);
         }
         E = new FuncSin(arrayPhi, arrayA);
+        energy = compound.getDouble("Energy");
+        energyCapacity = compound.getDouble("EnergyCapacity");
     }
 
     @Override
@@ -46,15 +50,39 @@ public class TileEntityGenerator extends TileEntityMachineBase {
         }
         nbt.setInteger("ASize", arrayA.length);
         compound.setTag("E", nbt);
+        compound.setDouble("Energy", energy);
+        compound.setDouble("EnergyCapacity", energyCapacity);
         return super.writeToNBT(compound);
+    }
+
+    public void setE(double A, double phi) {
+        this.E = new FuncSin(phi, A);
     }
 
     public FuncSin getE() {
         return E;
     }
 
-    public void setE(double A, double phi) {
-        this.E = new FuncSin(phi, A);
+    public void setEnergyCapacity(double capacity) {
+        this.energyCapacity = capacity;
+    }
+
+    public double getEnergyCapacity() {
+        return this.energyCapacity;
+    }
+
+    public double getEnergy() {
+        return this.energy;
+    }
+
+    public void incEnergy(double amount) {
+        this.energy += amount;
+        if (this.energy > this.energyCapacity) this.energy = this.energyCapacity;
+    }
+
+    public void decEnergy(double amount) {
+        this.energy -= amount;
+        if (this.energy < 0) this.energy = 0;
     }
 
     public void setPositive(EnumFacing positive) {
@@ -63,6 +91,11 @@ public class TileEntityGenerator extends TileEntityMachineBase {
 
     public void setNegative(EnumFacing negative) {
         this.port[1] = negative;
+    }
+
+    @Override
+    public double getP() {
+        return isWorking() ? getE().getEffective()*(getE().getEffective()-getU())/R : 0.0D;
     }
 
 }
