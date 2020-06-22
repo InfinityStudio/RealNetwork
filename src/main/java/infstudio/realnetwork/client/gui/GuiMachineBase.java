@@ -167,6 +167,8 @@ public class GuiMachineBase extends GuiContainer {
             }
             default: break;
         }
+        int damage = container.getDamage();
+        this.fontRenderer.drawString(String.format("Damage: %d%%", damage), 100, 72, 4210752);
     }
 
 }

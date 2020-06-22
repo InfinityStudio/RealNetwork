@@ -6,16 +6,18 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
 
-public class TileEntityWireBase extends TileEntity {
+public class TileEntityWireBase extends TileEntity implements ITickable {
 
     protected double R;
     protected FuncSin phi[] = new FuncSin[] {new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin(), new FuncSin()};
     protected String name;
+    protected double damage;
 
     public TileEntityWireBase() {
 
@@ -42,6 +44,7 @@ public class TileEntityWireBase extends TileEntity {
             phi[i] = new FuncSin(arrayPhi, arrayA);
         }
         R = compound.getDouble("Resistance");
+        damage = compound.getDouble("Damage");
     }
 
     @Override
@@ -61,6 +64,7 @@ public class TileEntityWireBase extends TileEntity {
             compound.setTag("Phi"+i, nbt);
         }
         compound.setDouble("Resistance", R);
+        compound.setDouble("Damage", damage);
         return super.writeToNBT(compound);
     }
 
@@ -118,6 +122,14 @@ public class TileEntityWireBase extends TileEntity {
         this.phi = phi;
     }
 
+    public void setDamage(double damage) {
+        this.damage = damage > 100.0D ? 100.0D : damage;
+    }
+
+    public double getDamage() {
+        return this.damage;
+    }
+
     protected EnumFacing getFaceByIndex(int index) {
         switch (index) {
             case 0: return EnumFacing.DOWN;
@@ -130,6 +142,11 @@ public class TileEntityWireBase extends TileEntity {
         return EnumFacing.NORTH;
     }
 
-
+    @Override
+    public void update() {
+        if (!this.world.isRemote && this.getDamage() >= 100.0D) {
+            this.world.createExplosion(null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 0.1F, true);
+        }
+    }
 
 }

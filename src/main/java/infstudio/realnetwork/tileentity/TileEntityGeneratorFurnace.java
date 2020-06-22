@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -18,11 +17,12 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class TileEntityGeneratorFurnace extends TileEntityGenerator implements ITickable {
+public class TileEntityGeneratorFurnace extends TileEntityGenerator {
 
     private ItemStackHandler invFuel = new ItemStackHandler();
     private ItemStackHandler invApp = new ItemStackHandler();
     private ItemStackHandler invFluid = new ItemStackHandler();
+    private double lastP = 0.0D;
 
     private FluidTank tank = new FluidTank(16000) {
         @Override
@@ -110,22 +110,31 @@ public class TileEntityGeneratorFurnace extends TileEntityGenerator implements I
 
     @Override
     public void update() {
+        super.update();
         boolean flag = false;
         if (this.isBurning()) {
             this.burnTime--;
             if (getFluidAmount() > 0) {
+                if (damageTime > 0) damageTime--;
                 if (this.tank.drain(2, false) != null) {
                     this.tank.drain(2, true);
                     this.incEnergy(220.0D);
                 }
+            } else {
+                damageTime++;
+                this.setDamage(damage+1e-4*Math.exp(1e-2*damageTime));
             }
             flag = true;
         }
         if (!this.world.isRemote) {
-            if (this.getEnergy() >= this.getP() && Math.abs(this.getE().A.get(0)) < 1e-8){
+            if (this.getEnergy() >= lastP && Math.abs(this.getE().A.get(0)) < 1e-8){
                 this.setE(311.0D, 0.0D);
                 new NetWork(this.world, this.pos);
-                flag = true;
+                lastP = this.getP();
+                if (this.getEnergy() < lastP) {
+                    this.setE(0.0D, 0.0D);
+                    new NetWork(this.world, this.pos);
+                } else flag = true;
             }
             if (this.getEnergy() < this.getP() && this.getE().A.get(0) > 0) {
                 this.setE(0.0D, 0.0D);

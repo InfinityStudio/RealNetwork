@@ -10,6 +10,7 @@ public class TileEntityMachineBase extends TileEntityWireBase {
     protected double EPS = 1e-8;
     protected EnumFacing port[] = new EnumFacing[2];
     protected EnumFacing facing;
+    protected int damageTime;
 
     public TileEntityMachineBase() {
         super();
@@ -31,6 +32,7 @@ public class TileEntityMachineBase extends TileEntityWireBase {
             port[1] = getFaceByIndex(portIndex[1]);
         }
         facing = getFaceByIndex(compound.getInteger("Facing"));
+        damageTime = compound.getInteger("DamageTime");
     }
 
     @Override
@@ -38,6 +40,7 @@ public class TileEntityMachineBase extends TileEntityWireBase {
         int portIndex[] = new int[] {port[0].getIndex(), port[1].getIndex()};
         compound.setIntArray("Port", portIndex);
         compound.setInteger("Facing", facing.getIndex());
+        compound.setInteger("DamageTime", damageTime);
         return super.writeToNBT(compound);
     }
 
