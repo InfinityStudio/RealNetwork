@@ -12,19 +12,23 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber(modid = RealNetwork.MODID)
 public class ItemLoader {
 
-    private static Item itemList[] = new Item[] {
-        new ItemTool(), new ItemTestTool()
-    };
+    public static ItemTool itemTool = new ItemTool();
+    public static ItemTestTool itemTestTool = new ItemTestTool();
+    public static ItemBattery itemBattery = new ItemBattery();
 
     public ItemLoader() {
 
     }
 
+    private static void registerItem(Item item, RegistryEvent.Register<Item> event) {
+        event.getRegistry().register(item);
+    }
+
     @SubscribeEvent
     public static void registerItem(RegistryEvent.Register<Item> event) {
-        for (int i = 0; i < itemList.length; ++i) {
-            event.getRegistry().register(itemList[i]);
-        }
+        registerItem(itemTool, event);
+        registerItem(itemTestTool, event);
+        registerItem(itemBattery, event);
     }
 
     private static void registerRender(Item item) {
@@ -33,9 +37,9 @@ public class ItemLoader {
 
     @SubscribeEvent
     public static void registerRender(ModelRegistryEvent event) {
-        for (int i = 0; i < itemList.length; ++i) {
-            registerRender(itemList[i]);
-        }
+        registerRender(itemTool);
+        registerRender(itemTestTool);
+        registerRender(itemBattery);
     }
 
 }

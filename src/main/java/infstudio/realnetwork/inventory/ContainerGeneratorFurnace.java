@@ -1,5 +1,6 @@
 package infstudio.realnetwork.inventory;
 
+import infstudio.realnetwork.item.ItemAppliance;
 import infstudio.realnetwork.tileentity.TileEntityGeneratorFurnace;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -36,40 +37,9 @@ public class ContainerGeneratorFurnace extends ContainerMachineBase {
         this.itemFuel = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
         this.itemApp = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN);
         this.itemFluid = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
-        this.addSlotToContainer(new SlotItemHandler(itemFuel, 0, 71, 32) {
-            @Override
-            public boolean isItemValid(@Nonnull ItemStack stack) {
-                return TileEntityFurnace.isItemFuel(stack) || isBucket(stack);
-            }
-
-            @Override
-            public int getItemStackLimit(@Nonnull ItemStack stack) {
-                return isBucket(stack) ? 1 : super.getItemStackLimit(stack);
-            }
-
-            public boolean isBucket(ItemStack stack)
-            {
-                return stack.getItem() == Items.BUCKET;
-            }
-        });
-        this.addSlotToContainer(new SlotItemHandler(itemApp, 0, 95, 20) {
-
-        });
-        this.addSlotToContainer(new SlotItemHandler(itemFluid, 0, 95, 44) {
-            @Override
-            public boolean isItemValid(@Nonnull ItemStack stack) {
-                if (stack.getItem().equals(Items.WATER_BUCKET)) return true;
-                if (stack.hasTagCompound()) {
-                    NBTTagCompound tag = stack.getTagCompound();
-                    FluidStack fluid = FluidStack.loadFluidStackFromNBT(tag);
-                    if (fluid != null) {
-                        if (fluid.getFluid().equals(FluidRegistry.WATER)) return true;
-                        else return false;
-                    } else return false;
-                }
-                return false;
-            }
-        });
+        this.addSlotToContainer(new SlotFuel(itemFuel, 0, 71, 32));
+        this.addSlotToContainer(new SlotAppliance(itemApp, 0, 95, 20));
+        this.addSlotToContainer(new SlotFluid(itemFluid, 0, 95, 44));
     }
 
     public int getFluidAmount() {

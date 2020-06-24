@@ -2,6 +2,7 @@ itemGroup.realnetwork=Real Network
 
 item.tool.name=Tool
 item.test_tool.name=Test Tool
+item.battery.name=Battery
 
 tile.ammeter.name=Ammeter
 tile.generator.name=Generator

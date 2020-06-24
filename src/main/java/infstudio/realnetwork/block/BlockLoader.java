@@ -20,28 +20,48 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 @Mod.EventBusSubscriber(modid = RealNetwork.MODID)
 public class BlockLoader {
 
-    public static BlockWireBase[] blockList = new BlockWireBase[] {
-            new BlockWire(), new BlockGenerator(), new BlockGeneratorFurnace(), new BlockResistance(), new BlockAmmeter(), new BlockVoltmeter(), new BlockSwitch()
-    };
+    public static BlockWire blockWire = new BlockWire();
+    public static BlockGenerator blockGenerator = new BlockGenerator();
+    public static BlockGeneratorFurnace blockGeneratorFurnace = new BlockGeneratorFurnace();
+    public static BlockResistance blockResistance = new BlockResistance();
+    public static BlockAmmeter blockAmmeter = new BlockAmmeter();
+    public static BlockVoltmeter blockVoltmeter = new BlockVoltmeter();
+    public static BlockSwitch blockSwitch = new BlockSwitch();
 
     public BlockLoader() {
 
     }
 
+    private static void registerBlock(BlockWireBase block, RegistryEvent.Register<Block> event) {
+        block.setRegistryName(RealNetwork.MODID, block.getName());
+        event.getRegistry().register(block);
+        GameRegistry.registerTileEntity(block.getTileEntity(), new ResourceLocation(RealNetwork.MODID, block.getName()));
+    }
+
     @SubscribeEvent
     public static void registerBlock(RegistryEvent.Register<Block> event) {
-        for (int i = 0; i < blockList.length; ++i) {
-            blockList[i].setRegistryName(RealNetwork.MODID, blockList[i].getName());
-            event.getRegistry().register(blockList[i]);
-            GameRegistry.registerTileEntity(blockList[i].getTileEntity(), new ResourceLocation(RealNetwork.MODID, blockList[i].getName()));
-        }
+        registerBlock(blockWire, event);
+        registerBlock(blockGenerator, event);
+        registerBlock(blockGeneratorFurnace, event);
+        registerBlock(blockResistance, event);
+        registerBlock(blockAmmeter, event);
+        registerBlock(blockVoltmeter, event);
+        registerBlock(blockSwitch, event);
+    }
+
+    private static void registerItem(BlockWireBase block, RegistryEvent.Register<Item> event) {
+        event.getRegistry().register(new ItemBlock(block).setRegistryName(block.getRegistryName()).setCreativeTab(block.getCreativeTab()).setTranslationKey(block.getTranslationKey()));
     }
 
     @SubscribeEvent
     public static void registerItem(RegistryEvent.Register<Item> event) {
-        for (int i = 0; i < blockList.length; ++i) {
-            event.getRegistry().register(new ItemBlock(blockList[i]).setRegistryName(blockList[i].getRegistryName()).setCreativeTab(blockList[i].getCreativeTab()).setTranslationKey(blockList[i].getTranslationKey()));
-        }
+        registerItem(blockWire, event);
+        registerItem(blockGenerator, event);
+        registerItem(blockGeneratorFurnace, event);
+        registerItem(blockResistance, event);
+        registerItem(blockAmmeter, event);
+        registerItem(blockVoltmeter, event);
+        registerItem(blockSwitch, event);
     }
 
     private static void registerRender(Block block) {
@@ -52,9 +72,13 @@ public class BlockLoader {
     public static void registerRender(ModelRegistryEvent event) {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineBase.class, new RenderMachineBase());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWire.class, new RenderWire());
-        for (int i = 0; i < blockList.length; ++i) {
-            registerRender(blockList[i]);
-        }
+        registerRender(blockWire);
+        registerRender(blockGenerator);
+        registerRender(blockGeneratorFurnace);
+        registerRender(blockResistance);
+        registerRender(blockAmmeter);
+        registerRender(blockVoltmeter);
+        registerRender(blockSwitch);
     }
 
 }

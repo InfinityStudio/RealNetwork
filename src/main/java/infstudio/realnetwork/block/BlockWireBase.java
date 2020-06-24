@@ -21,7 +21,7 @@ public class BlockWireBase extends BlockContainer {
         super(Material.ROCK);
     }
 
-    public void setName(String name) {
+    protected void setName(String name) {
         this.name = name;
         setCreativeTab(RealNetwork.rnTab);
         setTranslationKey(name);

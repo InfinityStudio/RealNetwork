@@ -29,7 +29,7 @@ public class RealNetwork {
         @Override
         @SideOnly(Side.CLIENT)
         public ItemStack createIcon() {
-            return new ItemStack(Item.getItemFromBlock(BlockLoader.blockList[1]));
+            return new ItemStack(Item.getItemFromBlock(BlockLoader.blockAmmeter));
         }
     };
 
