@@ -1,6 +1,7 @@
 package infstudio.realnetwork.tileentity;
 
 import infstudio.realnetwork.core.NetWork;
+import infstudio.realnetwork.item.ItemAppliance;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,7 +25,7 @@ public class TileEntityGeneratorFurnace extends TileEntityGenerator {
     private ItemStackHandler invFluid = new ItemStackHandler();
     private double lastP = 0.0D;
 
-    private FluidTank tank = new FluidTank(16000) {
+    public FluidTank tank = new FluidTank(16000) {
         @Override
         public boolean canFillFluidType(FluidStack fluid) {
             return fluid.getFluid().equals(FluidRegistry.WATER) && super.canFillFluidType(fluid);
@@ -144,6 +145,15 @@ public class TileEntityGeneratorFurnace extends TileEntityGenerator {
             if (this.isWorking()) {
                 this.decEnergy(this.getP());
                 flag = true;
+            }
+            ItemStack stackApp = this.invApp.getStackInSlot(0);
+            if (this.getEnergy() > 0.0D && !stackApp.isEmpty()) {
+                ItemAppliance itemApp = (ItemAppliance)stackApp.getItem();
+                if (!itemApp.isFull(stackApp)) {
+                    double amount = Math.min(Math.min(itemApp.getCapacity(stackApp)-itemApp.getEnergy(stackApp), 220.0D), this.getEnergy());
+                    itemApp.incEnergy(stackApp, amount);
+                    this.decEnergy(amount);
+                }
             }
             if (this.isBurning()) {
                 flag = true;

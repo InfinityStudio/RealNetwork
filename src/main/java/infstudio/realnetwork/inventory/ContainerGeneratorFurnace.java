@@ -1,23 +1,13 @@
 package infstudio.realnetwork.inventory;
 
-import infstudio.realnetwork.item.ItemAppliance;
 import infstudio.realnetwork.tileentity.TileEntityGeneratorFurnace;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IContainerListener;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
-
-import javax.annotation.Nonnull;
 
 public class ContainerGeneratorFurnace extends ContainerMachineBase {
 
@@ -39,7 +29,7 @@ public class ContainerGeneratorFurnace extends ContainerMachineBase {
         this.itemFluid = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
         this.addSlotToContainer(new SlotFuel(itemFuel, 0, 71, 32));
         this.addSlotToContainer(new SlotAppliance(itemApp, 0, 95, 20));
-        this.addSlotToContainer(new SlotFluid(itemFluid, 0, 95, 44));
+        this.addSlotToContainer(new SlotWater(itemFluid, 0, 95, 44));
     }
 
     public int getFluidAmount() {
