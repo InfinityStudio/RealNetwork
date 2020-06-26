@@ -26,9 +26,7 @@ public class ContainerAmmeter extends ContainerMachineBase {
         super.detectAndSendChanges();
         for (int i = 0; i < listeners.size(); ++i) {
             IContainerListener iContainerListener = listeners.get(i);
-            if (I != (int)(tile.getI()*100)) {
-                iContainerListener.sendWindowProperty(this, 1, (int)(tile.getI()*10));
-            }
+            iContainerListener.sendWindowProperty(this, 1, (int)(tile.getI()*10));
         }
         I = (int)(tile.getI()*100);
     }

@@ -20,10 +20,29 @@ import javax.annotation.Nullable;
 
 public class TileEntityGeneratorFurnace extends TileEntityGenerator {
 
-    private ItemStackHandler invFuel = new ItemStackHandler();
-    private ItemStackHandler invApp = new ItemStackHandler();
-    private ItemStackHandler invFluid = new ItemStackHandler();
+    private ItemStackHandler invFuel = new ItemStackHandler() {
+        @Override
+        protected void onContentsChanged(int slot) {
+            super.onContentsChanged(slot);
+            TileEntityGeneratorFurnace.this.markDirty();
+        }
+    };
+    private ItemStackHandler invApp = new ItemStackHandler() {
+        @Override
+        protected void onContentsChanged(int slot) {
+            super.onContentsChanged(slot);
+            TileEntityGeneratorFurnace.this.markDirty();
+        }
+    };
+    private ItemStackHandler invFluid = new ItemStackHandler() {
+        @Override
+        protected void onContentsChanged(int slot) {
+            super.onContentsChanged(slot);
+            TileEntityGeneratorFurnace.this.markDirty();
+        }
+    };
     private double lastP = 0.0D;
+    private int tick = 0;
 
     public FluidTank tank = new FluidTank(16000) {
         @Override
@@ -128,11 +147,13 @@ public class TileEntityGeneratorFurnace extends TileEntityGenerator {
             flag = true;
         }
         if (!this.world.isRemote) {
+            tick = (tick+1)%100;
+            if (tick == 0) this.lastP = 0;
             if (this.getEnergy() >= lastP && Math.abs(this.getE().A.get(0)) < 1e-8){
                 this.setE(311.0D, 0.0D);
                 new NetWork(this.world, this.pos);
-                lastP = this.getP();
-                if (this.getEnergy() < lastP) {
+                this.lastP = this.getP();
+                if (this.getEnergy() < this.lastP) {
                     this.setE(0.0D, 0.0D);
                     new NetWork(this.world, this.pos);
                 } else flag = true;

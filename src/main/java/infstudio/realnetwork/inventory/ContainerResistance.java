@@ -26,9 +26,7 @@ public class ContainerResistance extends ContainerMachineBase {
         super.detectAndSendChanges();
         for (int i = 0; i < listeners.size(); ++i) {
             IContainerListener iContainerListener = listeners.get(i);
-            if (R != (int)(tile.getResistance()*10)) {
-                iContainerListener.sendWindowProperty(this, 1, (int)(tile.getResistance()*10));
-            }
+            iContainerListener.sendWindowProperty(this, 1, (int)(tile.getResistance()*10));
         }
         R = (int)(tile.getResistance()*10);
     }

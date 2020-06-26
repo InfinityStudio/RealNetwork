@@ -26,9 +26,7 @@ public class ContainerGenerator extends ContainerMachineBase {
         super.detectAndSendChanges();
         for (int i = 0; i < listeners.size(); ++i) {
             IContainerListener iContainerListener = listeners.get(i);
-            if (E != (int)(tile.getE().A.get(0)*10)) {
-                iContainerListener.sendWindowProperty(this, 1, (int)(tile.getE().A.get(0)*10));
-            }
+            iContainerListener.sendWindowProperty(this, 1, (int)(tile.getE().A.get(0)*10));
         }
         E = (int)(tile.getE().A.get(0)*10);
     }

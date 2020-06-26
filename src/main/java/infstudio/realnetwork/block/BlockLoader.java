@@ -23,6 +23,7 @@ public class BlockLoader {
     public static BlockWire blockWire = new BlockWire();
     public static BlockGenerator blockGenerator = new BlockGenerator();
     public static BlockGeneratorFurnace blockGeneratorFurnace = new BlockGeneratorFurnace();
+    public static BlockGeneratorBattery blockGeneratorBattery = new BlockGeneratorBattery();
     public static BlockResistance blockResistance = new BlockResistance();
     public static BlockAmmeter blockAmmeter = new BlockAmmeter();
     public static BlockVoltmeter blockVoltmeter = new BlockVoltmeter();
@@ -43,6 +44,7 @@ public class BlockLoader {
         registerBlock(blockWire, event);
         registerBlock(blockGenerator, event);
         registerBlock(blockGeneratorFurnace, event);
+        registerBlock(blockGeneratorBattery, event);
         registerBlock(blockResistance, event);
         registerBlock(blockAmmeter, event);
         registerBlock(blockVoltmeter, event);
@@ -58,6 +60,7 @@ public class BlockLoader {
         registerItem(blockWire, event);
         registerItem(blockGenerator, event);
         registerItem(blockGeneratorFurnace, event);
+        registerItem(blockGeneratorBattery, event);
         registerItem(blockResistance, event);
         registerItem(blockAmmeter, event);
         registerItem(blockVoltmeter, event);
@@ -75,6 +78,7 @@ public class BlockLoader {
         registerRender(blockWire);
         registerRender(blockGenerator);
         registerRender(blockGeneratorFurnace);
+        registerRender(blockGeneratorBattery);
         registerRender(blockResistance);
         registerRender(blockAmmeter);
         registerRender(blockVoltmeter);

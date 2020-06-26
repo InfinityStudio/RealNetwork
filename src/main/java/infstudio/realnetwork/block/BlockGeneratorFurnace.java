@@ -40,6 +40,7 @@ public class BlockGeneratorFurnace extends BlockGenerator {
                     tile.tank.fill(new FluidStack(FluidRegistry.WATER, 1000), true);
                     Item itemFluid = stackHand.getItem();
                     tile.markDirty();
+                    worldIn.notifyBlockUpdate(pos, worldIn.getBlockState(pos), worldIn.getBlockState(pos), 2);
                     if (!playerIn.isCreative()) stackHand.shrink(1);
                     if (stackHand.isEmpty() && !playerIn.isCreative()) {
                         ItemStack itemFluid1 = itemFluid.getContainerItem(stackHand);

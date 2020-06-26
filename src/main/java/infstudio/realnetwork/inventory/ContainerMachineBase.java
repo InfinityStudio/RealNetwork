@@ -49,9 +49,7 @@ public class ContainerMachineBase extends Container {
         super.detectAndSendChanges();
         for (int i = 0; i < listeners.size(); ++i) {
             IContainerListener iContainerListener = listeners.get(i);
-            if (damage != (int)tileMachine.getDamage()) {
-                iContainerListener.sendWindowProperty(this, 0, (int)tileMachine.getDamage());
-            }
+            iContainerListener.sendWindowProperty(this, 0, (int)tileMachine.getDamage());
         }
         damage = (int)tileMachine.getDamage();
     }

@@ -2,6 +2,7 @@ package infstudio.realnetwork.network;
 
 import infstudio.realnetwork.core.NetWork;
 import infstudio.realnetwork.tileentity.TileEntitySwitch;
+import infstudio.realnetwork.tileentity.TileEntityWireBase;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
@@ -59,9 +60,9 @@ public class MessageMachineBase implements IMessage {
                         TileEntitySwitch tile = (TileEntitySwitch)ctx.getServerHandler().player.world.getTileEntity(pos);
                         if (!tile.getStatus()) {
                             BlockPos pos0 = new BlockPos(pos.getX()+tile.getPort()[0].getDirectionVec().getX(), pos.getY()+tile.getPort()[0].getDirectionVec().getY(), pos.getZ()+tile.getPort()[0].getDirectionVec().getZ());
-                            new NetWork(ctx.getServerHandler().player.world, pos0);
+                            if (ctx.getServerHandler().player.world.getTileEntity(pos0) instanceof TileEntityWireBase) new NetWork(ctx.getServerHandler().player.world, pos0);
                             BlockPos pos1 = new BlockPos(pos.getX()+tile.getPort()[1].getDirectionVec().getX(), pos.getY()+tile.getPort()[1].getDirectionVec().getY(), pos.getZ()+tile.getPort()[1].getDirectionVec().getZ());
-                            new NetWork(ctx.getServerHandler().player.world, pos1);
+                            if (ctx.getServerHandler().player.world.getTileEntity(pos1) instanceof TileEntityWireBase) new NetWork(ctx.getServerHandler().player.world, pos1);
                         }
                     }
                     new NetWork(ctx.getServerHandler().player.world, pos);

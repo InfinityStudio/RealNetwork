@@ -26,9 +26,7 @@ public class ContainerVoltmeter extends ContainerMachineBase {
         super.detectAndSendChanges();
         for (int i = 0; i < listeners.size(); ++i) {
             IContainerListener iContainerListener = listeners.get(i);
-            if (U != (int)(tile.getU()*100)) {
-                iContainerListener.sendWindowProperty(this, 1, (int)(tile.getU()*10));
-            }
+            iContainerListener.sendWindowProperty(this, 1, (int)(tile.getU()*10));
         }
         U = (int)(tile.getU()*100);
     }

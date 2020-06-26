@@ -65,24 +65,12 @@ public class ContainerGeneratorFurnace extends ContainerMachineBase {
         super.detectAndSendChanges();
         for (int i = 0; i < listeners.size(); ++i) {
             IContainerListener iContainerListener = listeners.get(i);
-            if (burnTime != tile.getBurnTime()) {
-                iContainerListener.sendWindowProperty(this, 1, tile.getBurnTime());
-            }
-            if (curItemBurnTime != tile.getCurItemBurnTime()) {
-                iContainerListener.sendWindowProperty(this, 2, tile.getCurItemBurnTime());
-            }
-            if (fluidAmount != tile.getFluidAmount()) {
-                iContainerListener.sendWindowProperty(this, 3, tile.getFluidAmount());
-            }
-            if (fluidCapacity != tile.getFluidCapacity()) {
-                iContainerListener.sendWindowProperty(this, 4, tile.getFluidCapacity());
-            }
-            if (energy != (int)tile.getEnergy()) {
-                iContainerListener.sendWindowProperty(this, 5, (int)tile.getEnergy());
-            }
-            if (energyCapacity != (int)tile.getEnergyCapacity()) {
-                iContainerListener.sendWindowProperty(this, 6, (int)tile.getEnergyCapacity());
-            }
+            iContainerListener.sendWindowProperty(this, 1, tile.getBurnTime());
+            iContainerListener.sendWindowProperty(this, 2, tile.getCurItemBurnTime());
+            iContainerListener.sendWindowProperty(this, 3, tile.getFluidAmount());
+            iContainerListener.sendWindowProperty(this, 4, tile.getFluidCapacity());
+            iContainerListener.sendWindowProperty(this, 5, (int)tile.getEnergy());
+            iContainerListener.sendWindowProperty(this, 6, (int)tile.getEnergyCapacity());
         }
         this.burnTime = tile.getBurnTime();
         this.curItemBurnTime = tile.getCurItemBurnTime();
