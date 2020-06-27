@@ -28,6 +28,7 @@ public class BlockLoader {
     public static BlockAmmeter blockAmmeter = new BlockAmmeter();
     public static BlockVoltmeter blockVoltmeter = new BlockVoltmeter();
     public static BlockSwitch blockSwitch = new BlockSwitch();
+    public static BlockElectricFurnace blockElectricFurnace = new BlockElectricFurnace();
 
     public BlockLoader() {
 
@@ -49,6 +50,7 @@ public class BlockLoader {
         registerBlock(blockAmmeter, event);
         registerBlock(blockVoltmeter, event);
         registerBlock(blockSwitch, event);
+        registerBlock(blockElectricFurnace, event);
     }
 
     private static void registerItem(BlockWireBase block, RegistryEvent.Register<Item> event) {
@@ -65,6 +67,7 @@ public class BlockLoader {
         registerItem(blockAmmeter, event);
         registerItem(blockVoltmeter, event);
         registerItem(blockSwitch, event);
+        registerItem(blockElectricFurnace, event);
     }
 
     private static void registerRender(Block block) {
@@ -83,6 +86,7 @@ public class BlockLoader {
         registerRender(blockAmmeter);
         registerRender(blockVoltmeter);
         registerRender(blockSwitch);
+        registerRender(blockElectricFurnace);
     }
 
 }

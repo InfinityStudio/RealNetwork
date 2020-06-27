@@ -21,6 +21,7 @@ public class GuiLoader implements IGuiHandler {
     public static final int GUI_RESISTANCE = 5;
     public static final int GUI_GENERATOR_FURNACE = 6;
     public static final int GUI_GENERATOR_BATTERY = 7;
+    public static final int GUI_ELECTRIC_FURNACE = 8;
 
     public GuiLoader() {
         NetworkRegistry.INSTANCE.registerGuiHandler(RealNetwork.MODID, this);
@@ -37,6 +38,7 @@ public class GuiLoader implements IGuiHandler {
             case GUI_RESISTANCE: return new ContainerResistance(player.inventory, (TileEntityResistance)world.getTileEntity(new BlockPos(x, y, z)));
             case GUI_GENERATOR_FURNACE: return new ContainerGeneratorFurnace(player.inventory, (TileEntityGeneratorFurnace)world.getTileEntity(new BlockPos(x, y, z)));
             case GUI_GENERATOR_BATTERY: return new ContainerGeneratorBattery(player.inventory, (TileEntityGeneratorBattery)world.getTileEntity(new BlockPos(x, y, z)));
+            case GUI_ELECTRIC_FURNACE: return new ContainerElectricFurnace(player.inventory, (TileEntityElectricFurnace)world.getTileEntity(new BlockPos(x, y, z)));
             default: return null;
         }
     }
@@ -52,6 +54,7 @@ public class GuiLoader implements IGuiHandler {
             case GUI_RESISTANCE: return new GuiResistance(new ContainerResistance(player.inventory, (TileEntityResistance)world.getTileEntity(new BlockPos(x, y, z))));
             case GUI_GENERATOR_FURNACE: return new GuiGeneratorFurnace(new ContainerGeneratorFurnace(player.inventory, (TileEntityGeneratorFurnace)world.getTileEntity(new BlockPos(x, y, z))));
             case GUI_GENERATOR_BATTERY: return new GuiGeneratorBattery(new ContainerGeneratorBattery(player.inventory, (TileEntityGeneratorBattery)world.getTileEntity(new BlockPos(x, y, z))));
+            case GUI_ELECTRIC_FURNACE: return new GuiElectricFurnace(new ContainerElectricFurnace(player.inventory, (TileEntityElectricFurnace)world.getTileEntity(new BlockPos(x, y, z))));
             default: return null;
         }
     }

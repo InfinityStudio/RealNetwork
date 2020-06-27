@@ -11,6 +11,7 @@ tile.generator_furnace.name=Furnace Generator
 tile.resistance.name=Resistance
 tile.switch.name=Switch
 tile.voltmeter.name=Voltmeter
+tile.electric_furnace.name=Electric Furnace
 tile.wire.name=Wire
 
 gui.change_port_success=Change successfully
