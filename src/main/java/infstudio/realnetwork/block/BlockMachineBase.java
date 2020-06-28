@@ -11,6 +11,12 @@ import net.minecraft.world.World;
 
 public class BlockMachineBase extends BlockWireBase {
 
+    public BlockMachineBase() {
+        super();
+        setHardness(2.0F);
+        setHarvestLevel("pickaxe", 2);
+    }
+
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);

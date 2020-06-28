@@ -19,6 +19,8 @@ public class BlockWireBase extends BlockContainer {
 
     public BlockWireBase() {
         super(Material.ROCK);
+        setHardness(0.5F);
+        setHarvestLevel("pickaxe", 0);
     }
 
     protected void setName(String name) {

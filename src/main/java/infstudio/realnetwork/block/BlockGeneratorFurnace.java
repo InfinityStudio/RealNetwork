@@ -7,6 +7,7 @@ import infstudio.realnetwork.tileentity.TileEntityGeneratorFurnace;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -16,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 public class BlockGeneratorFurnace extends BlockGenerator {
 
@@ -57,6 +59,18 @@ public class BlockGeneratorFurnace extends BlockGenerator {
     @Override
     public Class getTileEntity() {
         return TileEntityGeneratorFurnace.class;
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileEntityGeneratorFurnace tile = (TileEntityGeneratorFurnace)worldIn.getTileEntity(pos);
+        ItemStack stackFuel = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP).getStackInSlot(0);
+        ItemStack stackApp = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN).getStackInSlot(0);
+        ItemStack stackFluid = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH).getStackInSlot(0);
+        if (!stackFuel.isEmpty()) InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), stackFuel);
+        if (!stackApp.isEmpty()) InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), stackApp);
+        if (!stackFluid.isEmpty()) InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), stackFluid);
+        super.breakBlock(worldIn, pos, state);
     }
 
 }

@@ -6,12 +6,14 @@ import infstudio.realnetwork.item.ItemLoader;
 import infstudio.realnetwork.tileentity.TileEntityElectricFurnace;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 public class BlockElectricFurnace extends BlockSwitch {
 
@@ -39,4 +41,15 @@ public class BlockElectricFurnace extends BlockSwitch {
     public Class getTileEntity() {
         return TileEntityElectricFurnace.class;
     }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileEntityElectricFurnace tile = (TileEntityElectricFurnace)worldIn.getTileEntity(pos);
+        ItemStack stackInput = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP).getStackInSlot(0);
+        ItemStack stackOutput = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN).getStackInSlot(0);
+        if (!stackInput.isEmpty()) InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), stackInput);
+        if (!stackOutput.isEmpty()) InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), stackOutput);
+        super.breakBlock(worldIn, pos, state);
+    }
+
 }
